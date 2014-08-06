@@ -89,6 +89,7 @@ public class YogaMojiHome extends FragmentActivity {
 
         //Create the tabs
         Tab tab = theActionBar.newTab().setText("All").setTabListener(tabListener);
+
         theActionBar.addTab(tab);
         tab = theActionBar.newTab().setText("Asana").setTabListener(tabListener);
         theActionBar.addTab(tab);

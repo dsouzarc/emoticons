@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YogaMoji!.iml" filepath="$PROJECT_DIR$/YogaMoji!.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Yogamoji!.iml" filepath="$PROJECT_DIR$/app/Yogamoji!.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yogamoji/yogamoji.iml" filepath="$PROJECT_DIR$/yogamoji/yogamoji.iml" />
     </modules>
   </component>
 </project>
