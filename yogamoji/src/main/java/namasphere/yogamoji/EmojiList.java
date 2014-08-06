@@ -32,6 +32,8 @@ public abstract class EmojiList extends Fragment {
     public static final String PHRASES = "phrases.txt";
     public static final String SYMBOLS = "symbols.txt";
 
+    protected static final int SIZE = 200;
+
     protected Context theC;
     protected AssetManager theAssets;
     protected LinearLayout theLayout;
@@ -126,7 +128,7 @@ public abstract class EmojiList extends Fragment {
             startTime = System.currentTimeMillis();
             try {
                 return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName[0])),
-                        200, 200, false);
+                        SIZE, SIZE, false);
             }
             catch (Exception e) {
                 log(e.toString());
@@ -181,7 +183,6 @@ public abstract class EmojiList extends Fragment {
         @Override
         public void onClick(View theView) {
             new EmojiSender().execute(fileName);
-
             makeToast("Sending " + reformatEmojiName(fileName) + " Yogamoji");
         }
     }

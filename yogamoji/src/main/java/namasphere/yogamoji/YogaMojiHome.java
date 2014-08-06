@@ -4,24 +4,37 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.Menu;
+import android.graphics.BitmapFactory;
 import android.view.MenuItem;
+import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.app.FragmentTransaction;
 
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 
 public class YogaMojiHome extends FragmentActivity {
 
+    private static final int SIZE = 200;
+
     private ActionBar theActionBar;
     private ViewPager theViewPager;
+    private Context theC;
+    private AssetManager theAssets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yoga_moji_home);
+
+        theC = getApplicationContext();
+        theAssets = theC.getAssets();
 
         theActionBar = getActionBar();
         theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -89,16 +102,33 @@ public class YogaMojiHome extends FragmentActivity {
 
         //Create the tabs
         Tab tab = theActionBar.newTab().setText("All").setTabListener(tabListener);
+        theActionBar.addTab(tab);
 
-        theActionBar.addTab(tab);
         tab = theActionBar.newTab().setText("Asana").setTabListener(tabListener);
+        tab.setIcon(getDrawable("yoga_asana.png"));
         theActionBar.addTab(tab);
+
         tab = theActionBar.newTab().setText("Logos & Backgrounds").setTabListener(tabListener);
         theActionBar.addTab(tab);
+
         tab = theActionBar.newTab().setText("Phrases").setTabListener(tabListener);
         theActionBar.addTab(tab);
+
         tab = theActionBar.newTab().setText("Symbols").setTabListener(tabListener);
         theActionBar.addTab(tab);
+    }
+
+    public Drawable getDrawable(final String assetFileName) {
+        try {
+            return new BitmapDrawable(getApplicationContext().getResources(),
+                    Bitmap.createScaledBitmap(BitmapFactory.decodeStream
+                                    (theAssets.open(assetFileName)), SIZE, SIZE, false));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            log(e.toString());
+            return null;
+        }
     }
 
     public void log(final String message) {
