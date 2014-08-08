@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import java.util.Map;
+import android.view.ViewParent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.ScrollView;
@@ -76,7 +77,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 5;
 
     private final HashMap<String, Bitmap[]> theImages = new HashMap<String, Bitmap[]>();
-    private final Map<ImageView, Integer> theViews = new Map<ImageView, Integer>();
+    private final HashMap<ImageView, Integer> theViews = new HashMap<ImageView, Integer>();
 
     private final Context theC;
     private final AssetManager theAssets;
@@ -178,17 +179,20 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
             final ImageView theImage = new ImageView(theC);
             theImage.setImageBitmap(theBitmap);
-            //theImage.setOnClickListener(theListener);
-            allLayout.addView(theImage);
             theViews.put(theImage, counter);
+            allLayout.addView(theImage);
+
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
+            final long newImageView = System.currentTimeMillis();
+            if(tag_name.equals(ASANA_KEY)) {
+                final ImageView theImage1 = new ImageView(theC);
+                theImage1.setImageBitmap(theBitmap);
+                asanaLayout.addView(theImage1);
+            }
+            log("NEW IMAGE VIEW TIME:\t" + (System.currentTimeMillis() - newImageView));
         }
     };
-
-
-
-
 
     //Invoked when page is requested to be made
     @Override
@@ -231,17 +235,31 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
+    int asanaFirst = 0;
+
     public class AsanaEmojis extends EmojiList {
-        private LinearLayout theLayout;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final String[] fileNames = super.getEmojiNamesList(super.ASANA);
-            View rootInflater = inflater.inflate(R.layout.asana_emojis, container, false);
-            theC = getActivity().getApplicationContext();
-            theLayout = (LinearLayout) rootInflater.findViewById(R.id.emojisLL);
-            super.setLayout(theLayout);
-            for(int i = 0; i < fileNames.length; i++)
-                new EmojiAdder(fileNames[i]).execute(fileNames[i]);
+            asanaFirst++;
+            final View rootInflater = inflater.inflate(R.layout.asana_emojis, container, false);
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+
+            if(asanaFirst > 1) {
+                container.removeAllViews();
+                theScroll.removeAllViews();
+                asanaLayout.removeAllViews();
+            }
+
+            final Context theC = getActivity().getApplicationContext();
+
+            final Bitmap[] thePhotos = theImages.get(ASANA_KEY);
+            for(Bitmap thePhoto : thePhotos) {
+                final ImageView theV = new ImageView(theC);
+                theV.setImageBitmap(thePhoto);
+                asanaLayout.addView(theV);
+            }
+
+            theScroll.addView(asanaLayout);
             return rootInflater;
         }
     }
@@ -250,31 +268,24 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            View rootInflater = inflater.inflate(R.layout.all_emojis, container, false);
-            ((ScrollView) rootInflater.findViewById(namasphere.yogamoji.R.id.theScrollView)).addView(allLayout);
+            final View rootInflater = inflater.inflate(R.layout.all_emojis, container, false);
 
-            /*final String[] fileNames = getFileNames();
-            Arrays.sort(fileNames);
-            View rootInflater = inflater.inflate(R.layout.symbols_emojis, container, false);
-            theC  = getActivity().getApplicationContext();
+            final ScrollView theView = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+            final Context theC = getActivity().getApplicationContext();
 
-            theLayout = (LinearLayout) rootInflater.findViewById(R.id.emojisLL);
-            super.setLayout(theLayout);
+            theView.removeAllViews();
+            allLayout.removeAllViews();
 
-            for(int i = 0; i < fileNames.length; i++)
-                new EmojiAdder(fileNames[i]).execute(fileNames[i]);*/
+            final Bitmap[] allImages = theImages.get(ALL_KEY);
+            for(Bitmap theM : allImages) {
+                ImageView aV = new ImageView(theC);
+                aV.setImageBitmap(theM);
+                allLayout.addView(aV);
+            }
+
+            theView.addView(allLayout);
 
             return rootInflater;
-        }
-
-        private final String[] getFileNames() {
-            final LinkedList<String> theList = new LinkedList<String>();
-            theList.addAll(Arrays.asList(super.getEmojiNamesList(super.ASANA)));
-            theList.addAll(Arrays.asList(super.getEmojiNamesList(super.LOGOSBACKGROUNDS)));
-            theList.addAll(Arrays.asList(super.getEmojiNamesList(super.PHRASES)));
-            theList.addAll(Arrays.asList(super.getEmojiNamesList(super.SYMBOLS)));
-
-            return theList.toArray(new String[theList.size()]);
         }
     }
 
@@ -282,40 +293,16 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-
-            final String[] fileNames = super.getEmojiNamesList(super.SYMBOLS);
-
-            View rootInflater = inflater.inflate(R.layout.symbols_emojis, container, false);
-            theC  = getActivity().getApplicationContext();
-
-            theLayout = (LinearLayout) rootInflater.findViewById(R.id.emojisLL);
-            super.setLayout(theLayout);
-
-            for(int i = 0; i < fileNames.length; i++)
-                new EmojiAdder(fileNames[i]).execute(fileNames[i]);
+            final View rootInflater = inflater.inflate(R.layout.symbols_emojis, container, false);
             return rootInflater;
         }
 
-        @Override
-        public void onStart() {
-            super.onStart();
-        }
     }
 
     public class PhrasesEmojis extends EmojiList {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-
-            final String[] fileNames = super.getEmojiNamesList(super.PHRASES);
-
-            View rootInflater = inflater.inflate(R.layout.phrases_emojis, container, false);
-            theC  = getActivity().getApplicationContext();
-
-            theLayout = (LinearLayout) rootInflater.findViewById(R.id.emojisLL);
-            super.setLayout(theLayout);
-
-            for(int i = 0; i < fileNames.length; i++)
-                new EmojiAdder(fileNames[i]).execute(fileNames[i]);
+            final View rootInflater = inflater.inflate(R.layout.phrases_emojis, container, false);
             return rootInflater;
         }
     }
@@ -323,28 +310,14 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     public class LogosBackgroundsEmojis extends EmojiList {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-
-            final String[] fileNames = super.getEmojiNamesList(super.LOGOSBACKGROUNDS);
-
-            View rootInflater = inflater.inflate(R.layout.logos_backgrounds_emojis, container, false);
-            theC  = getActivity().getApplicationContext();
-
-            theLayout = (LinearLayout) rootInflater.findViewById(R.id.emojisLL);
-            super.setLayout(theLayout);
-
-            for(int i = 0; i < fileNames.length; i++)
-                new EmojiAdder(fileNames[i]).execute(fileNames[i]);
-
+            final View rootInflater = inflater.inflate(R.layout.logos_backgrounds_emojis, container, false);
             return rootInflater;
         }
     }
 
-    /** Returns a String array
-     * of all the names of the Emojis in that textfile
-     */
     protected String[] getEmojiNamesList(final String fileName) {
         try {
-            //LinkedLists are best for adding unknown amounts of data
+
             final LinkedList<String> theFileNames = new LinkedList<String>();
             InputStreamReader theISR =
                     new InputStreamReader(theAssets.open(fileName));
@@ -371,8 +344,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         return theNames.toArray(new String[theNames.size()]);
     }
 
-
-    /** Returns the number of pages */
     @Override
     public int getCount() {
         return PAGE_COUNT;
