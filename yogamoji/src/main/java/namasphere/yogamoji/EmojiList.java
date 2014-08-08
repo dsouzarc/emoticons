@@ -2,16 +2,11 @@ package namasphere.yogamoji;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Color;
 import android.net.Uri;
-import java.io.InputStream;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.Fragment;

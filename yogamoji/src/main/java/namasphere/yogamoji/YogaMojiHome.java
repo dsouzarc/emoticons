@@ -2,20 +2,20 @@ package namasphere.yogamoji;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.Menu;
-import android.graphics.BitmapFactory;
 import android.view.MenuItem;
-import android.graphics.drawable.Drawable;
-import android.graphics.Bitmap;
-import android.app.FragmentTransaction;
 
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 

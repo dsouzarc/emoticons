@@ -1,62 +1,27 @@
 package namasphere.yogamoji;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
-import java.util.Map;
-import android.view.ViewParent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.ScrollView;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.BitmapFactory.Options;
-import android.graphics.Color;
-import android.net.Uri;
-import java.io.InputStream;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.ArrayList;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import java.util.Collections;
-import java.util.HashMap;
+import android.widget.ScrollView;
 
-import android.graphics.Bitmap;
-import android.content.Context;
-import java.util.concurrent.ConcurrentHashMap;
-import android.content.res.AssetManager;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -290,7 +255,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theScroll.addView(symbolsLayout);
             return rootInflater;
         }
-
     }
 
     public class PhrasesEmojis extends EmojiList {
@@ -320,12 +284,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     protected String[] getEmojiNamesList(final String fileName) {
         try {
             final LinkedList<String> theFileNames = new LinkedList<String>();
-            InputStreamReader theISR =
-                    new InputStreamReader(theAssets.open(fileName));
-            BufferedReader theReader = new BufferedReader(theISR);
+            final InputStreamReader theISR = new InputStreamReader(theAssets.open(fileName));
+            final BufferedReader theReader = new BufferedReader(theISR);
 
-            while(theReader.ready())
+            while(theReader.ready()) {
                 theFileNames.add(theReader.readLine());
+            }
 
             return theFileNames.toArray(new String[theFileNames.size()]);
         }
