@@ -43,6 +43,7 @@ public abstract class EmojiList extends Fragment {
     protected AssetManager theAssets;
     protected LinearLayout theLayout;
 
+
     /** Returns a String array
      * of all the names of the Emojis in that textfile
      */

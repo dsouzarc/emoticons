@@ -56,7 +56,7 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager.setOnPageChangeListener(thePageListener);
 
         //Create FragmentPageAdapter
-        final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager);
+        final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager, theC);
 
         theViewPager.setAdapter(fragmentPagerAdapter);
         theActionBar.setDisplayShowTitleEnabled(true);
@@ -130,6 +130,8 @@ public class YogaMojiHome extends FragmentActivity {
             return null;
         }
     }
+
+
 
     public void log(final String message) {
         Log.e("com.NamaSphere.yogamoji", message);
