@@ -245,9 +245,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
 
             if(asanaFirst > 1) {
-                container.removeAllViews();
-                theScroll.removeAllViews();
-                asanaLayout.removeAllViews();
+                ViewGroup parentViewGroup = (ViewGroup) asanaLayout.getParent();
+                if(parentViewGroup != null) {
+                    parentViewGroup.removeAllViewsInLayout();
+                }
             }
 
             final Context theC = getActivity().getApplicationContext();
