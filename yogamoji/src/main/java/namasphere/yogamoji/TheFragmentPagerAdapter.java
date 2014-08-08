@@ -136,7 +136,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         for(int i = 0; i < symbolsNames.length; i++, counter++) {
             new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
         }
-
     }
 
     /** For adding emojis to the layout
@@ -182,15 +181,23 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theViews.put(theImage, counter);
             allLayout.addView(theImage);
 
-
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
-            final long newImageView = System.currentTimeMillis();
+
+            final ImageView theImage1 = new ImageView(theC);
+            theImage1.setImageBitmap(theBitmap);
+
             if(tag_name.equals(ASANA_KEY)) {
-                final ImageView theImage1 = new ImageView(theC);
-                theImage1.setImageBitmap(theBitmap);
                 asanaLayout.addView(theImage1);
             }
-            log("NEW IMAGE VIEW TIME:\t" + (System.currentTimeMillis() - newImageView));
+            else if(tag_name.equals(LOGOSBACKGROUNDS_KEY)) {
+                logosLayout.addView(theImage1);
+            }
+            else if(tag_name.equals(PHRASES_KEY)) {
+                phrasesLayout.addView(theImage1);
+            }
+            else if(tag_name.equals(SYMBOLS_KEY)) {
+                symbolsLayout.addView(theImage1);
+            }
         }
     };
 
@@ -235,33 +242,26 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    int asanaFirst = 0;
-
     public class AsanaEmojis extends EmojiList {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            asanaFirst++;
             final View rootInflater = inflater.inflate(R.layout.asana_emojis, container, false);
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
 
-            if(asanaFirst > 1) {
-                ViewGroup parentViewGroup = (ViewGroup) asanaLayout.getParent();
-                if(parentViewGroup != null) {
-                    parentViewGroup.removeAllViewsInLayout();
-                }
-            }
-
-            final Context theC = getActivity().getApplicationContext();
-
-            final Bitmap[] thePhotos = theImages.get(ASANA_KEY);
-            for(Bitmap thePhoto : thePhotos) {
-                final ImageView theV = new ImageView(theC);
-                theV.setImageBitmap(thePhoto);
-                asanaLayout.addView(theV);
-            }
-
+            removeParent(asanaLayout);
             theScroll.addView(asanaLayout);
             return rootInflater;
+        }
+    }
+
+    private void removeParent(final View theView) {
+        if(theView == null) {
+            return;
+        }
+
+        final ViewGroup theParent = (ViewGroup) theView.getParent();
+        if(theParent != null) {
+            theParent.removeAllViewsInLayout();
         }
     }
 
@@ -270,20 +270,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.all_emojis, container, false);
-
             final ScrollView theView = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-            final Context theC = getActivity().getApplicationContext();
 
-            theView.removeAllViews();
-            allLayout.removeAllViews();
-
-            final Bitmap[] allImages = theImages.get(ALL_KEY);
-            for(Bitmap theM : allImages) {
-                ImageView aV = new ImageView(theC);
-                aV.setImageBitmap(theM);
-                allLayout.addView(aV);
-            }
-
+            removeParent(allLayout);
             theView.addView(allLayout);
 
             return rootInflater;
@@ -294,7 +283,11 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final View rootInflater = inflater.inflate(R.layout.symbols_emojis, container, false);
+            final View rootInflater = inflater.inflate(namasphere.yogamoji.R.layout.symbols_emojis, container, false);
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+
+            removeParent(symbolsLayout);
+            theScroll.addView(symbolsLayout);
             return rootInflater;
         }
 
@@ -304,6 +297,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.phrases_emojis, container, false);
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+
+            removeParent(phrasesLayout);
+            theScroll.addView(phrasesLayout);
             return rootInflater;
         }
     }
@@ -312,13 +309,16 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.logos_backgrounds_emojis, container, false);
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+
+            removeParent(logosLayout);
+            theScroll.addView(logosLayout);
             return rootInflater;
         }
     }
 
     protected String[] getEmojiNamesList(final String fileName) {
         try {
-
             final LinkedList<String> theFileNames = new LinkedList<String>();
             InputStreamReader theISR =
                     new InputStreamReader(theAssets.open(fileName));
