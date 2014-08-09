@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -86,14 +87,23 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final OnClickListener SendEmojiListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            log("Clicked");
             if(!(v instanceof ImageView)) {
+                log("Returning...");
                 return;
             }
+
+            makeToast("loading...");
+            final long start = System.currentTimeMillis();
             final int counter = theViews.get(v);
-            log("COUNTER\t" + counter);
+            log("Found map: " + (System.currentTimeMillis() - start));
             new EmojiSender(theC).execute(theViews.get(v));
         }
     };
+
+    private void makeToast(final String message) {
+        Toast.makeText(theC, message,Toast.LENGTH_SHORT).show();
+    }
 
     /** For sending Yogamojis
      * Using filename, re-reads entire Image
@@ -110,8 +120,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public Uri doInBackground(final Integer... theCounters) {
             this.theCounter = theCounters[0];
-            makeToast("Reformatting Yogamoji to send");
+            final long find = System.currentTimeMillis();
             final Bitmap theImage = theImages.get(ALL_KEY)[theCounter];
+            log("Found in: " + (System.currentTimeMillis() - find));
 
             try {
                 File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -121,6 +132,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
                 fileOutPutStream.flush();
                 fileOutPutStream.close();
+
+                log("Total\t" + (System.currentTimeMillis() - find));
 
                 return Uri.parse("file://" + imageFile.getAbsolutePath());
             }
@@ -136,6 +149,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             if(theUri == null)
                 return;
             try {
+                final long s = System.currentTimeMillis();
+
                 final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
                 sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
@@ -143,6 +158,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 final Intent theSender = Intent.createChooser(sendEmoji, "Send Yogamoji using ");
                 theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 theContext.startActivity(theSender);
+
+                log("Intent: " + (System.currentTimeMillis() - s));
             }
 
             catch(Exception e) {
@@ -366,10 +383,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         if(theParent != null) {
             theParent.removeAllViewsInLayout();
         }
-    }
-
-    private void makeToast(final String theText) {
-        Toast.makeText(theC, theText, Toast.LENGTH_LONG).show();
     }
 
     private String[] getAllNames() {

@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 
@@ -25,7 +26,7 @@ public class YogaMojiHome extends FragmentActivity {
 
     private ActionBar theActionBar;
     private ViewPager theViewPager;
-    private Context theC;
+    private static Context theC;
     private AssetManager theAssets;
 
     @Override
@@ -130,8 +131,6 @@ public class YogaMojiHome extends FragmentActivity {
             return null;
         }
     }
-
-
 
     public void log(final String message) {
         Log.e("com.NamaSphere.yogamoji", message);
