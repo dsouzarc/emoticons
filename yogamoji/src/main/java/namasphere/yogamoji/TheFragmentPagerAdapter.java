@@ -94,7 +94,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             }
 
             makeToast("Loading...");
-            new EmojiSender(theC).execute(theViews.get(v));
+            final Thread toSend = new Thread(new EmojiSender(theViews.get(v)));
+            toSend.setPriority(Thread.MAX_PRIORITY);
+            toSend.start();
         }
     };
 
@@ -104,69 +106,42 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         theToast.show();
     }
 
-    /** For sending Yogamojis
-     * Using filename, re-reads entire Image
-     * Writes it temporarily, sends it
-     */
-    protected final class EmojiSender extends AsyncTask<Integer, Void, Uri> {
-        private int theCounter;
-        private final Context theContext;
+    private class EmojiSender implements Runnable {
+        private final int counter;
 
-        public EmojiSender(final Context theC) {
-            this.theContext = theC;
+        public EmojiSender(final int counter) {
+            this.counter = counter;
         }
 
         @Override
-        public Uri doInBackground(final Integer... theCounters) {
-            this.theCounter = theCounters[0];
-            final long find = System.currentTimeMillis();
-            final Bitmap theImage = theImages.get(ALL_KEY)[theCounter];
-            log("Found in: " + (System.currentTimeMillis() - find));
+        public void run() {
+            final long start = System.currentTimeMillis();
+            final Bitmap theImage = theImages.get(ALL_KEY)[counter];
 
             try {
                 File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                 File imageFile = new File(path, "Yogamoji!" + ".png");
                 FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
-
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
                 fileOutPutStream.flush();
                 fileOutPutStream.close();
 
-                log("Total\t" + (System.currentTimeMillis() - find));
-
-                return Uri.parse("file://" + imageFile.getAbsolutePath());
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                log(e.toString());
-                return null;
-            }
-        }
-
-        @Override
-        public void onPostExecute(final Uri theUri) {
-            if(theUri == null)
-                return;
-            try {
-                final long s = System.currentTimeMillis();
-
                 final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
                 sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
+                sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
                 sendEmoji.setType("image/png");
                 final Intent theSender = Intent.createChooser(sendEmoji, "Send Yogamoji using ");
                 theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                theContext.startActivity(theSender);
-
-                log("Intent: " + (System.currentTimeMillis() - s));
-            }
-
-            catch(Exception e) {
+                theC.startActivity(theSender);
+            } catch (Exception e) {
                 e.printStackTrace();
                 log(e.toString());
             }
+
+            log("Sent image in: " + (System.currentTimeMillis() - start));
         }
-    }
+    };
+
 
     /** For adding emojis to the layout
      * Given file name, gets Bitmap, adds it t layout
