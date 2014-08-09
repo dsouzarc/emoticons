@@ -16,7 +16,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 

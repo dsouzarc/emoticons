@@ -6,15 +6,14 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,19 +91,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 log("Returning...");
                 return;
             }
-
             makeToast("Loading...");
             final Thread toSend = new Thread(new EmojiSender(theViews.get(v)));
             toSend.setPriority(Thread.MAX_PRIORITY);
             toSend.start();
         }
     };
-
-    private void makeToast(final String theMessage) {
-        final Toast theToast = Toast.makeText(theC, theMessage, Toast.LENGTH_LONG);
-        theToast.setGravity(Gravity.CENTER, 0, 0);
-        theToast.show();
-    }
 
     private class EmojiSender implements Runnable {
         private final int counter;
@@ -358,6 +350,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         if(theParent != null) {
             theParent.removeAllViewsInLayout();
         }
+    }
+
+    private void makeToast(final String theMessage) {
+        final Toast theToast = Toast.makeText(theC, theMessage, Toast.LENGTH_LONG);
+        theToast.setGravity(Gravity.CENTER, 0, 0);
+        theToast.show();
     }
 
     private String[] getAllNames() {
