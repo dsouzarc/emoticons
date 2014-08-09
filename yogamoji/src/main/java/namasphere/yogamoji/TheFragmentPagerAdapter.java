@@ -111,6 +111,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             if(!(v instanceof ImageView)) {
                 return;
             }
+            final int counter = theViews.get(v);
+            log("COUNTER\t" + counter);
             new EmojiSender(theC).execute(theViews.get(v));
         }
     };
@@ -130,6 +132,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public Uri doInBackground(final Integer... theCounters) {
             this.theCounter = theCounters[0];
+            makeToast("Reformatting Yogamoji to send");
             final Bitmap theImage = theImages.get(ALL_KEY)[theCounter];
 
             try {
@@ -159,7 +162,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
                 sendEmoji.setType("image/png");
-                theContext.startActivity(Intent.createChooser(sendEmoji, "Send Yogamoji using "));
+                final Intent theSender = Intent.createChooser(sendEmoji, "Send Yogamoji using ");
+                theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                theContext.startActivity(theSender);
             }
 
             catch(Exception e) {
@@ -392,6 +397,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             e.printStackTrace();
             return new String[]{e.toString()};
         }
+    }
+
+    private void makeToast(final String theText) {
+        Toast.makeText(theC, theText, Toast.LENGTH_LONG).show();
     }
 
     private String[] getAllNames() {
