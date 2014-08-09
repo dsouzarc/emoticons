@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -87,22 +88,20 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final OnClickListener SendEmojiListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            log("Clicked");
             if(!(v instanceof ImageView)) {
                 log("Returning...");
                 return;
             }
 
-            makeToast("loading...");
-            final long start = System.currentTimeMillis();
-            final int counter = theViews.get(v);
-            log("Found map: " + (System.currentTimeMillis() - start));
+            makeToast("Loading...");
             new EmojiSender(theC).execute(theViews.get(v));
         }
     };
 
-    private void makeToast(final String message) {
-        Toast.makeText(theC, message,Toast.LENGTH_SHORT).show();
+    private void makeToast(final String theMessage) {
+        final Toast theToast = Toast.makeText(theC, theMessage, Toast.LENGTH_LONG);
+        theToast.setGravity(Gravity.CENTER, 0, 0);
+        theToast.show();
     }
 
     /** For sending Yogamojis
