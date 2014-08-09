@@ -192,6 +192,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final ImageView theImage1 = new ImageView(theC);
             theImage1.setImageBitmap(theBitmap);
             theImage1.setOnClickListener(SendEmojiListener);
+            theViews.put(theImage1, counter);
 
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
