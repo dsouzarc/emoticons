@@ -1,51 +1,30 @@
 package namasphere.yogamoji;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import android.app.AlertDialog;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,8 +45,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     public static final String SYMBOLS = "symbols.txt";
 
     private static final int SIZE = 200;
-
-    final int PAGE_COUNT = 5;
+    private static final int PAGE_COUNT = 5;
 
     private final HashMap<String, Bitmap[]> theImages = new HashMap<String, Bitmap[]>();
     private final HashMap<ImageView, Integer> theViews = new HashMap<ImageView, Integer>();
@@ -76,7 +54,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final AssetManager theAssets;
 
     private final String[] allNames, asanaNames, logosNames, phrasesNames, symbolsNames;
-
     private final LinearLayout allLayout, asanaLayout, logosLayout, phrasesLayout, symbolsLayout;
 
     public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC) {
@@ -105,6 +82,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         getAllDrawables();
     }
 
+    /** On click listener for sending a Yogamoji */
     private final OnClickListener SendEmojiListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -174,32 +152,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    private void getAllDrawables() {
-        theImages.put(ALL_KEY, new Bitmap[allNames.length]);
-        theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
-        theImages.put(LOGOSBACKGROUNDS_KEY, new Bitmap[logosNames.length]);
-        theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
-        theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
-
-        int counter = 0;
-
-        for(int i = 0; i < asanaNames.length; i++, counter++) {
-            new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
-        }
-
-        for(int i = 0; i < logosNames.length; i++, counter++) {
-            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
-        }
-
-        for(int i = 0; i < phrasesNames.length; i++, counter++) {
-            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
-        }
-
-        for(int i = 0; i < symbolsNames.length; i++, counter++) {
-            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
-        }
-    }
-
     /** For adding emojis to the layout
      * Given file name, gets Bitmap, adds it t layout
      */
@@ -265,7 +217,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     };
 
-    //Invoked when page is requested to be made
     @Override
     public Fragment getItem(int tabSelected) {
         Bundle data = new Bundle();
@@ -306,64 +257,24 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
+    public class AllEmojis extends EmojiList {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+            final View rootInflater = inflater.inflate(R.layout.all_emojis, container, false);
+            final ScrollView theView = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+            removeParent(allLayout);
+            theView.addView(allLayout);
+            return rootInflater;
+        }
+    }
+
     public class AsanaEmojis extends EmojiList {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.asana_emojis, container, false);
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-
             removeParent(asanaLayout);
             theScroll.addView(asanaLayout);
-            return rootInflater;
-        }
-    }
-
-    private void removeParent(final View theView) {
-        if(theView == null) {
-            return;
-        }
-
-        final ViewGroup theParent = (ViewGroup) theView.getParent();
-        if(theParent != null) {
-            theParent.removeAllViewsInLayout();
-        }
-    }
-
-    public class AllEmojis extends EmojiList {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final View rootInflater = inflater.inflate(R.layout.all_emojis, container, false);
-            final ScrollView theView = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-
-            removeParent(allLayout);
-            theView.addView(allLayout);
-
-            return rootInflater;
-        }
-    }
-
-    public class SymbolsEmojis extends EmojiList {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final View rootInflater = inflater.inflate(namasphere.yogamoji.R.layout.symbols_emojis, container, false);
-            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-
-            removeParent(symbolsLayout);
-            theScroll.addView(symbolsLayout);
-            return rootInflater;
-        }
-    }
-
-    public class PhrasesEmojis extends EmojiList {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final View rootInflater = inflater.inflate(R.layout.phrases_emojis, container, false);
-            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-
-            removeParent(phrasesLayout);
-            theScroll.addView(phrasesLayout);
             return rootInflater;
         }
     }
@@ -373,10 +284,57 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.logos_backgrounds_emojis, container, false);
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-
             removeParent(logosLayout);
             theScroll.addView(logosLayout);
             return rootInflater;
+        }
+    }
+
+    public class PhrasesEmojis extends EmojiList {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+            final View rootInflater = inflater.inflate(R.layout.phrases_emojis, container, false);
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+            removeParent(phrasesLayout);
+            theScroll.addView(phrasesLayout);
+            return rootInflater;
+        }
+    }
+
+    public class SymbolsEmojis extends EmojiList {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+            final View rootInflater = inflater.inflate(namasphere.yogamoji.R.layout.symbols_emojis, container, false);
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+            removeParent(symbolsLayout);
+            theScroll.addView(symbolsLayout);
+            return rootInflater;
+        }
+    }
+
+    private void getAllDrawables() {
+        theImages.put(ALL_KEY, new Bitmap[allNames.length]);
+        theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
+        theImages.put(LOGOSBACKGROUNDS_KEY, new Bitmap[logosNames.length]);
+        theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
+        theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
+
+        int counter = 0;
+
+        for(int i = 0; i < asanaNames.length; i++, counter++) {
+            new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
+        }
+
+        for(int i = 0; i < logosNames.length; i++, counter++) {
+            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
+        }
+
+        for(int i = 0; i < phrasesNames.length; i++, counter++) {
+            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
+        }
+
+        for(int i = 0; i < symbolsNames.length; i++, counter++) {
+            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
         }
     }
 
@@ -396,6 +354,17 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         catch (Exception e) {
             e.printStackTrace();
             return new String[]{e.toString()};
+        }
+    }
+
+    private void removeParent(final View theView) {
+        if(theView == null) {
+            return;
+        }
+
+        final ViewGroup theParent = (ViewGroup) theView.getParent();
+        if(theParent != null) {
+            theParent.removeAllViewsInLayout();
         }
     }
 
