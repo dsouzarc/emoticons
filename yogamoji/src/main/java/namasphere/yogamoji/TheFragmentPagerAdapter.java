@@ -5,6 +5,34 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import android.app.AlertDialog;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -77,6 +105,70 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         getAllDrawables();
     }
 
+    private final OnClickListener SendEmojiListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(!(v instanceof ImageView)) {
+                return;
+            }
+            new EmojiSender(theC).execute(theViews.get(v));
+        }
+    };
+
+    /** For sending Yogamojis
+     * Using filename, re-reads entire Image
+     * Writes it temporarily, sends it
+     */
+    protected final class EmojiSender extends AsyncTask<Integer, Void, Uri> {
+        private int theCounter;
+        private final Context theContext;
+
+        public EmojiSender(final Context theC) {
+            this.theContext = theC;
+        }
+
+        @Override
+        public Uri doInBackground(final Integer... theCounters) {
+            this.theCounter = theCounters[0];
+            final Bitmap theImage = theImages.get(ALL_KEY)[theCounter];
+
+            try {
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File imageFile = new File(path, "Yogamoji!" + ".png");
+                FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
+
+                theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
+                fileOutPutStream.flush();
+                fileOutPutStream.close();
+
+                return Uri.parse("file://" + imageFile.getAbsolutePath());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                log(e.toString());
+                return null;
+            }
+        }
+
+        @Override
+        public void onPostExecute(final Uri theUri) {
+            if(theUri == null)
+                return;
+            try {
+                final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
+                sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
+                sendEmoji.setType("image/png");
+                theContext.startActivity(Intent.createChooser(sendEmoji, "Send Yogamoji using "));
+            }
+
+            catch(Exception e) {
+                e.printStackTrace();
+                log(e.toString());
+            }
+        }
+    }
+
     private void getAllDrawables() {
         theImages.put(ALL_KEY, new Bitmap[allNames.length]);
         theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
@@ -144,12 +236,14 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final ImageView theImage = new ImageView(theC);
             theImage.setImageBitmap(theBitmap);
             theViews.put(theImage, counter);
+            theImage.setOnClickListener(SendEmojiListener);
             allLayout.addView(theImage);
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
 
             final ImageView theImage1 = new ImageView(theC);
             theImage1.setImageBitmap(theBitmap);
+            theImage1.setOnClickListener(SendEmojiListener);
 
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
