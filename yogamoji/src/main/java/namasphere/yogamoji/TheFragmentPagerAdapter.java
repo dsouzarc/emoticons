@@ -1,7 +1,11 @@
 package namasphere.yogamoji;
 
 import android.content.Context;
+import android.widget.GridLayout;
+
+import android.util.DisplayMetrics;
 import android.content.Intent;
+import android.graphics.Point;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,10 +64,16 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final String[] allNames, asanaNames, logosNames, phrasesNames, symbolsNames;
     private final LinearLayout allLayout, asanaLayout, logosLayout, phrasesLayout, symbolsLayout;
 
-    public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC) {
+    private final int width, height, imageWidth, imageHeight;
+
+    public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC, final int width, final int height) {
         super(fm);
         this.theC = theC;
         theAssets = theC.getAssets();
+        this.width = width;
+        this.height = height;
+        this.imageWidth = (int) 0.33 * width;
+        this.imageHeight = imageWidth;
 
         asanaNames = getEmojiNamesList(ASANA);
         logosNames = getEmojiNamesList(LOGOSBACKGROUNDS);
@@ -137,6 +147,44 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     };
 
+    private void getAllDrawables() {
+        theImages.put(ALL_KEY, new Bitmap[allNames.length]);
+        theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
+        theImages.put(LOGOSBACKGROUNDS_KEY, new Bitmap[logosNames.length]);
+        theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
+        theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
+
+        final GridLayout theGrid = new GridLayout(theC);
+        GridLayout.LayoutParams param = new GridLayout.LayoutParams();
+        param.height = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+        param.width = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+        theGrid.setLayoutParams(param);
+        theGrid.setColumnCount(3);
+        theGrid.setRowCount(allNames.length + 1);
+
+
+        int counter = 0;
+
+        for(int i = 0; i < asanaNames.length; i++, counter++) {
+            new EmojiAdder(ASANA_KEY, i, counter, theGrid).execute(asanaNames[i]);
+        }
+
+        for(int i = 0; i < logosNames.length; i++, counter++) {
+            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
+        }
+
+        for(int i = 0; i < phrasesNames.length; i++, counter++) {
+            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
+        }
+
+        for(int i = 0; i < symbolsNames.length; i++, counter++) {
+            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
+        }
+
+        allLayout.addView(theGrid);
+
+    }
+
 
     /** For adding emojis to the layout
      * Given file name, gets Bitmap, adds it t layout
@@ -146,7 +194,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String tag_name;
         private final int arrayElement, counter;
 
-        private LinearLayout temp = null;
+        private GridLayout theGrid;
+
 
         public EmojiAdder(final String tag_name, final int arrayElement, final int counter) {
             this.tag_name = tag_name;
@@ -154,14 +203,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             this.counter = counter;
         }
 
-        public EmojiAdder(final String tag_name, final int arrayElement, final int counter, LinearLayout temp) {
+        public EmojiAdder(final String tag_name, final int arrayElement, final int counter, GridLayout theGrid) {
             this.tag_name = tag_name;
             this.arrayElement = arrayElement;
             this.counter = counter;
-            this.temp = temp;
+            this.theGrid = theGrid;
         }
-
-
 
         @Override
         public Bitmap doInBackground(final String... fileName) {
@@ -192,17 +239,17 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theViews.put(theImage, counter);
             theImage.setOnClickListener(SendEmojiListener);
 
-            if(temp != null) {
-                theImage.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT));
-                temp.addView(theImage);
+            if(theGrid != null) {
+                GridLayout.LayoutParams param = new GridLayout.LayoutParams();
+                param.height = LayoutParams.WRAP_CONTENT;
+                theImage.setMinimumWidth(imageWidth);
+                theImage.setMinimumHeight(imageHeight);
+                param.width = LayoutParams.WRAP_CONTENT;
+                theImage.setLayoutParams(param);
+                theGrid.addView(theImage);
             }
             else {
                 allLayout.addView(theImage);
-            }
-
-            if(temp!= null && counter % 3 == 0) {
-                allLayout.addView(temp);
             }
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
@@ -319,38 +366,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             removeParent(symbolsLayout);
             theScroll.addView(symbolsLayout);
             return rootInflater;
-        }
-    }
-
-    private void getAllDrawables() {
-        theImages.put(ALL_KEY, new Bitmap[allNames.length]);
-        theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
-        theImages.put(LOGOSBACKGROUNDS_KEY, new Bitmap[logosNames.length]);
-        theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
-        theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
-
-        int counter = 0;
-
-        for(int i = 0; i < asanaNames.length; i++, counter++) {
-            for(int y = 0; y < 3 && y + i < asanaNames.length; y++) {
-                final LinearLayout theL = new LinearLayout(theC);
-                theL.setWeightSum(3);
-                new EmojiAdder(ASANA_KEY, i, counter, theL).execute(asanaNames[i]);
-                counter++;
-                i++;
-            }
-        }
-
-        for(int i = 0; i < logosNames.length; i++, counter++) {
-            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
-        }
-
-        for(int i = 0; i < phrasesNames.length; i++, counter++) {
-            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
-        }
-
-        for(int i = 0; i < symbolsNames.length; i++, counter++) {
-            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
         }
     }
 

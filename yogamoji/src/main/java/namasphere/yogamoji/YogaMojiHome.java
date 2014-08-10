@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.util.DisplayMetrics;
 
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 
@@ -39,9 +40,14 @@ public class YogaMojiHome extends FragmentActivity {
         theActionBar = getActionBar();
         theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        final int height = displaymetrics.heightPixels;
+        final int width = displaymetrics.widthPixels;
+
         theViewPager = (ViewPager) findViewById(R.id.theViewPager);
 
-        FragmentManager theManager = getSupportFragmentManager();
+        final FragmentManager theManager = getSupportFragmentManager();
 
         //listener for pageChange
         final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener(){
@@ -56,7 +62,7 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager.setOnPageChangeListener(thePageListener);
 
         //Create FragmentPageAdapter
-        final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager, theC);
+        final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager, theC, width, height);
 
         theViewPager.setAdapter(fragmentPagerAdapter);
         theActionBar.setDisplayShowTitleEnabled(true);
