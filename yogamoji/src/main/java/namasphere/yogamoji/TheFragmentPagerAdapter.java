@@ -170,15 +170,15 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         for(int i = 0; i < logosNames.length; i++, counter++) {
-            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
+            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter, theGrid).execute(logosNames[i]);
         }
 
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
-            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
+            new EmojiAdder(PHRASES_KEY, i, counter, theGrid).execute(phrasesNames[i]);
         }
 
         for(int i = 0; i < symbolsNames.length; i++, counter++) {
-            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
+            new EmojiAdder(SYMBOLS_KEY, i, counter, theGrid).execute(symbolsNames[i]);
         }
 
         allLayout.addView(theGrid);
@@ -242,7 +242,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             if(theGrid != null) {
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = LayoutParams.WRAP_CONTENT;
-                theImage.setMinimumWidth(imageWidth);
+                theImage.setMinimumWidth(imageWidth * 2);
+                //param.rightMargin = 5;
+                //param.topMargin = 5;
+                param.setGravity(Gravity.CENTER);
                 theImage.setMinimumHeight(imageHeight);
                 param.width = LayoutParams.WRAP_CONTENT;
                 theImage.setLayoutParams(param);
