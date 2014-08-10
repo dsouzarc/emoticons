@@ -245,7 +245,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = LayoutParams.WRAP_CONTENT;
                 theImage.setMinimumWidth(imageWidth * 2);
-                theImage.setPadding(20, 0, 0, 20);
+                theImage.setPadding(imageWidth, 0, 0, imageWidth);
                 //param.rightMargin = 5;
                 //param.topMargin = 5;
                 theImage.setMinimumHeight(imageHeight);
