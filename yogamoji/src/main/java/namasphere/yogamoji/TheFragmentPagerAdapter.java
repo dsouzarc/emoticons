@@ -74,7 +74,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         theAssets = theC.getAssets();
         this.width = width;
         this.height = height;
-        this.imageWidth = (int) 0.33 * width;
+        this.imageWidth = (int) (0.33 * width);
         this.imageHeight = imageWidth;
 
         asanaNames = getEmojiNamesList(ASANA);
@@ -244,12 +244,14 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             if(theGrid != null) {
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = LayoutParams.WRAP_CONTENT;
-                theImage.setMinimumWidth(imageWidth * 2);
-                theImage.setPadding(imageWidth, 0, 0, imageWidth);
+                param.width = LayoutParams.WRAP_CONTENT;
+
+                theImage.setMinimumWidth(imageWidth);
+                //theImage.setPadding(imageWidth, 0, 0, imageWidth);
                 //param.rightMargin = 5;
                 //param.topMargin = 5;
                 theImage.setMinimumHeight(imageHeight);
-                param.width = LayoutParams.WRAP_CONTENT;
+
                 theImage.setLayoutParams(param);
                 theGrid.addView(theImage);
             }
