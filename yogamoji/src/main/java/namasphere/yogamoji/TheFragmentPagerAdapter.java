@@ -38,6 +38,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+//TODO: Each fragment gets its own GridLayout, global variable, basically replace with LinearLayout
+//TODO: LayoutParams are also global variables
 
 public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -52,7 +54,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     public static final String PHRASES = "phrases.txt";
     public static final String SYMBOLS = "symbols.txt";
 
-    private static final int SIZE = 200;
+    private static final int SIZE = 250;
     private static final int PAGE_COUNT = 5;
 
     private final HashMap<String, Bitmap[]> theImages = new HashMap<String, Bitmap[]>();
@@ -161,7 +163,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         theGrid.setLayoutParams(param);
         theGrid.setColumnCount(3);
         theGrid.setRowCount(allNames.length + 1);
-
+        theGrid.setMinimumWidth(width);
 
         int counter = 0;
 
@@ -243,9 +245,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 GridLayout.LayoutParams param = new GridLayout.LayoutParams();
                 param.height = LayoutParams.WRAP_CONTENT;
                 theImage.setMinimumWidth(imageWidth * 2);
+                theImage.setPadding(20, 0, 0, 20);
                 //param.rightMargin = 5;
                 //param.topMargin = 5;
-                param.setGravity(Gravity.CENTER);
                 theImage.setMinimumHeight(imageHeight);
                 param.width = LayoutParams.WRAP_CONTENT;
                 theImage.setLayoutParams(param);
