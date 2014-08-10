@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -143,11 +146,22 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String tag_name;
         private final int arrayElement, counter;
 
+        private LinearLayout temp = null;
+
         public EmojiAdder(final String tag_name, final int arrayElement, final int counter) {
             this.tag_name = tag_name;
             this.arrayElement = arrayElement;
             this.counter = counter;
         }
+
+        public EmojiAdder(final String tag_name, final int arrayElement, final int counter, LinearLayout temp) {
+            this.tag_name = tag_name;
+            this.arrayElement = arrayElement;
+            this.counter = counter;
+            this.temp = temp;
+        }
+
+
 
         @Override
         public Bitmap doInBackground(final String... fileName) {
@@ -177,7 +191,19 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theImage.setImageBitmap(theBitmap);
             theViews.put(theImage, counter);
             theImage.setOnClickListener(SendEmojiListener);
-            allLayout.addView(theImage);
+
+            if(temp != null) {
+                theImage.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT));
+                temp.addView(theImage);
+            }
+            else {
+                allLayout.addView(theImage);
+            }
+
+            if(temp!= null && counter % 3 == 0) {
+                allLayout.addView(temp);
+            }
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
 
@@ -306,7 +332,13 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         int counter = 0;
 
         for(int i = 0; i < asanaNames.length; i++, counter++) {
-            new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
+            for(int y = 0; y < 3 && y + i < asanaNames.length; y++) {
+                final LinearLayout theL = new LinearLayout(theC);
+                theL.setWeightSum(3);
+                new EmojiAdder(ASANA_KEY, i, counter, theL).execute(asanaNames[i]);
+                counter++;
+                i++;
+            }
         }
 
         for(int i = 0; i < logosNames.length; i++, counter++) {
