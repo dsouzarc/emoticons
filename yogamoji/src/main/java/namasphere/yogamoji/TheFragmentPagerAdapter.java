@@ -78,8 +78,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         theAssets = theC.getAssets();
         this.width = width;
         this.height = height;
-        this.SIDE_MARGIN = (int) (width * 0.15);
-        this.imageWidth = (int) (0.18 * (width - (2 * SIDE_MARGIN)));
+        this.SIDE_MARGIN = 30; //(int) (width * 0.1);
+        this.imageWidth = (int) (0.1 * (width - (2 * SIDE_MARGIN)));
         this.imageHeight = imageWidth;
         log("WiDTH\t" + imageWidth + " HEIGhT\t" + imageHeight);
 
@@ -246,7 +246,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theImage.setMaxHeight(imageHeight);
             theImage.setMaxWidth(imageWidth);
             theImage.setMinimumWidth(imageWidth);
-            theImage.setPadding(imageWidth, 0, imageWidth, 0);
+            theImage.setPadding(SIDE_MARGIN, 0, SIDE_MARGIN, 0);
             theImage.setImageBitmap(theBitmap);
             theViews.put(theImage, counter);
             theImage.setOnClickListener(SendEmojiListener);
