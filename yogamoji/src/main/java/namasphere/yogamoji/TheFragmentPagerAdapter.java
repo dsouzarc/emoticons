@@ -64,9 +64,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final AssetManager theAssets;
 
     private final String[] allNames, asanaNames, logosNames, phrasesNames, symbolsNames;
-    private final LinearLayout allLayout, asanaLayout, logosLayout, phrasesLayout, symbolsLayout;
+    private final GridLayout allLayout, asanaLayout, logosLayout, phrasesLayout, symbolsLayout;
 
     private final int width, height, imageWidth, imageHeight;
+
+    private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
+    private static final  GridLayout.LayoutParams imageParams = new GridLayout.LayoutParams();
 
     public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC, final int width, final int height) {
         super(fm);
@@ -77,23 +80,42 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         this.imageWidth = (int) (0.33 * width);
         this.imageHeight = imageWidth;
 
+        gridParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        gridParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        imageParams.height = LayoutParams.WRAP_CONTENT;
+        imageParams.width = LayoutParams.WRAP_CONTENT;
+
         asanaNames = getEmojiNamesList(ASANA);
         logosNames = getEmojiNamesList(LOGOSBACKGROUNDS);
         phrasesNames = getEmojiNamesList(PHRASES);
         symbolsNames = getEmojiNamesList(SYMBOLS);
         allNames = getAllNames();
 
-        allLayout = new LinearLayout(theC);
-        asanaLayout = new LinearLayout(theC);
-        logosLayout = new LinearLayout(theC);
-        phrasesLayout = new LinearLayout(theC);
-        symbolsLayout = new LinearLayout(theC);
+        allLayout = new GridLayout(theC);
+        asanaLayout = new GridLayout(theC);
+        logosLayout = new GridLayout(theC);
+        phrasesLayout = new GridLayout(theC);
+        symbolsLayout = new GridLayout(theC);
 
-        allLayout.setOrientation(LinearLayout.VERTICAL);
-        asanaLayout.setOrientation(LinearLayout.VERTICAL);
-        logosLayout.setOrientation(LinearLayout.VERTICAL);
-        phrasesLayout.setOrientation(LinearLayout.VERTICAL);
-        symbolsLayout.setOrientation(LinearLayout.VERTICAL);
+        allLayout.setLayoutParams(gridParams);
+        asanaLayout.setLayoutParams(gridParams);
+        logosLayout.setLayoutParams(gridParams);
+        phrasesLayout.setLayoutParams(gridParams);
+        symbolsLayout.setLayoutParams(gridParams);
+
+        allLayout.setColumnCount(3);
+        asanaLayout.setColumnCount(3);
+        logosLayout.setColumnCount(3);
+        phrasesLayout.setColumnCount(3);
+        symbolsLayout.setColumnCount(3);
+
+        makeToast(String.valueOf(allNames.length));
+
+        allLayout.setRowCount(150);
+        asanaLayout.setRowCount(asanaNames.length + 1);
+        logosLayout.setRowCount(logosNames.length + 1);
+        phrasesLayout.setRowCount(phrasesNames.length + 1);
+        symbolsLayout.setRowCount(symbolsNames.length + 1);
 
         getAllDrawables();
     }
@@ -137,6 +159,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
                 sendEmoji.setType("image/png");
+
                 final Intent theSender = Intent.createChooser(sendEmoji, "Send Yogamoji using ");
                 theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 theC.startActivity(theSender);
@@ -149,6 +172,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     };
 
+
     private void getAllDrawables() {
         theImages.put(ALL_KEY, new Bitmap[allNames.length]);
         theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
@@ -156,35 +180,23 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
         theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
 
-        final GridLayout theGrid = new GridLayout(theC);
-        GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-        param.height = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-        param.width = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-        theGrid.setLayoutParams(param);
-        theGrid.setColumnCount(3);
-        theGrid.setRowCount(allNames.length + 1);
-        theGrid.setMinimumWidth(width);
-
         int counter = 0;
 
         for(int i = 0; i < asanaNames.length; i++, counter++) {
-            new EmojiAdder(ASANA_KEY, i, counter, theGrid).execute(asanaNames[i]);
+            new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
         }
 
         for(int i = 0; i < logosNames.length; i++, counter++) {
-            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter, theGrid).execute(logosNames[i]);
+            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
         }
 
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
-            new EmojiAdder(PHRASES_KEY, i, counter, theGrid).execute(phrasesNames[i]);
+            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
         }
 
         for(int i = 0; i < symbolsNames.length; i++, counter++) {
-            new EmojiAdder(SYMBOLS_KEY, i, counter, theGrid).execute(symbolsNames[i]);
+            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
         }
-
-        allLayout.addView(theGrid);
-
     }
 
 
@@ -196,20 +208,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String tag_name;
         private final int arrayElement, counter;
 
-        private GridLayout theGrid;
-
-
         public EmojiAdder(final String tag_name, final int arrayElement, final int counter) {
             this.tag_name = tag_name;
             this.arrayElement = arrayElement;
             this.counter = counter;
-        }
-
-        public EmojiAdder(final String tag_name, final int arrayElement, final int counter, GridLayout theGrid) {
-            this.tag_name = tag_name;
-            this.arrayElement = arrayElement;
-            this.counter = counter;
-            this.theGrid = theGrid;
         }
 
         @Override
@@ -241,30 +243,24 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theViews.put(theImage, counter);
             theImage.setOnClickListener(SendEmojiListener);
 
-            if(theGrid != null) {
-                GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-                param.height = LayoutParams.WRAP_CONTENT;
-                param.width = LayoutParams.WRAP_CONTENT;
-
-                theImage.setMinimumWidth(imageWidth);
-                //theImage.setPadding(imageWidth, 0, 0, imageWidth);
-                //param.rightMargin = 5;
-                //param.topMargin = 5;
-                theImage.setMinimumHeight(imageHeight);
-
-                theImage.setLayoutParams(param);
-                theGrid.addView(theImage);
+            //theImage.setMinimumWidth(imageWidth);
+            //theImage.setLayoutParams(imageParams);
+            //theImage.setMinimumHeight(imageHeight);
+            allLayout.addView(theImage);
+            try {
+                //allLayout.addView(theImage, counter);
             }
-            else {
-                allLayout.addView(theImage);
+            catch (Exception e) {
+                //allLayout.addView(theImage);
+                log(e.toString());
             }
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
 
             final ImageView theImage1 = new ImageView(theC);
             theImage1.setImageBitmap(theBitmap);
-            theImage1.setOnClickListener(SendEmojiListener);
             theViews.put(theImage1, counter);
+            theImage1.setOnClickListener(SendEmojiListener);
 
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
