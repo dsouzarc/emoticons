@@ -54,8 +54,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     public static final String PHRASES = "phrases.txt";
     public static final String SYMBOLS = "symbols.txt";
 
-    private static final int SIZE = 250;
+    private final int SIZE = 250;
     private static final int PAGE_COUNT = 5;
+    private final int SIDE_MARGIN;
+
+    private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
+    private static final  GridLayout.LayoutParams imageParams = new GridLayout.LayoutParams();
 
     private final HashMap<String, Bitmap[]> theImages = new HashMap<String, Bitmap[]>();
     private final HashMap<ImageView, Integer> theViews = new HashMap<ImageView, Integer>();
@@ -68,17 +72,16 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int width, height, imageWidth, imageHeight;
 
-    private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
-    private static final  GridLayout.LayoutParams imageParams = new GridLayout.LayoutParams();
-
     public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC, final int width, final int height) {
         super(fm);
         this.theC = theC;
         theAssets = theC.getAssets();
         this.width = width;
         this.height = height;
-        this.imageWidth = (int) (0.33 * width);
+        this.SIDE_MARGIN = (int) (width * 0.15);
+        this.imageWidth = (int) (0.18 * (width - (2 * SIDE_MARGIN)));
         this.imageHeight = imageWidth;
+        log("WiDTH\t" + imageWidth + " HEIGhT\t" + imageHeight);
 
         gridParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         gridParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -111,7 +114,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         makeToast(String.valueOf(allNames.length));
 
-        allLayout.setRowCount(150);
+        allLayout.setRowCount(allNames.length + 1);
         asanaLayout.setRowCount(asanaNames.length + 1);
         logosLayout.setRowCount(logosNames.length + 1);
         phrasesLayout.setRowCount(phrasesNames.length + 1);
@@ -239,21 +242,15 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theImages.get(ALL_KEY)[counter] = theBitmap;
 
             final ImageView theImage = new ImageView(theC);
+            theImage.setMinimumHeight(imageHeight);
+            theImage.setMaxHeight(imageHeight);
+            theImage.setMaxWidth(imageWidth);
+            theImage.setMinimumWidth(imageWidth);
+            theImage.setPadding(imageWidth, 0, imageWidth, 0);
             theImage.setImageBitmap(theBitmap);
             theViews.put(theImage, counter);
             theImage.setOnClickListener(SendEmojiListener);
-
-            //theImage.setMinimumWidth(imageWidth);
-            //theImage.setLayoutParams(imageParams);
-            //theImage.setMinimumHeight(imageHeight);
             allLayout.addView(theImage);
-            try {
-                //allLayout.addView(theImage, counter);
-            }
-            catch (Exception e) {
-                //allLayout.addView(theImage);
-                log(e.toString());
-            }
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
 
