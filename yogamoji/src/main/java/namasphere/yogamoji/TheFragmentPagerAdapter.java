@@ -249,7 +249,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theImage.setMaxHeight(imageHeight);
             theImage.setMaxWidth(imageWidth);
             theImage.setMinimumWidth(imageWidth);
-            theImage.setPadding(SIDE_MARGIN, 0, SIDE_MARGIN, SIDE_MARGIN * 10);
+            theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 10);
             theImage.setCropToPadding(true);
             theImage.setImageBitmap(theBitmap);
             theViews.put(theImage, counter);
