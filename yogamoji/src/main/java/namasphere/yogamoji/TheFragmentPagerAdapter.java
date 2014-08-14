@@ -245,23 +245,17 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             theImages.get(ALL_KEY)[counter] = theBitmap;
 
             final ImageView theImage = new ImageView(theC);
-            theImage.setMinimumHeight(imageHeight);
-            theImage.setMaxHeight(imageHeight);
-            theImage.setMaxWidth(imageWidth);
-            theImage.setMinimumWidth(imageWidth);
-            theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 2);
-            theImage.setCropToPadding(true);
             theImage.setImageBitmap(theBitmap);
+            setImageParams(theImage);
             theViews.put(theImage, counter);
-            theImage.setOnClickListener(SendEmojiListener);
             allLayout.addView(theImage);
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
 
             final ImageView theImage1 = new ImageView(theC);
             theImage1.setImageBitmap(theBitmap);
+            setImageParams(theImage1);
             theViews.put(theImage1, counter);
-            theImage1.setOnClickListener(SendEmojiListener);
 
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
@@ -277,6 +271,16 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         }
     };
+
+    private void setImageParams(final ImageView theImage) {
+        theImage.setMinimumHeight(imageHeight);
+        theImage.setMaxHeight(imageHeight);
+        theImage.setMaxWidth(imageWidth);
+        theImage.setMinimumWidth(imageWidth);
+        theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 2);
+        theImage.setCropToPadding(true);
+        theImage.setOnClickListener(SendEmojiListener);
+    }
 
     @Override
     public Fragment getItem(int tabSelected) {
