@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.util.DisplayMetrics;
-
+import android.view.View;
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 
 public class YogaMojiHome extends FragmentActivity {
@@ -105,9 +105,10 @@ public class YogaMojiHome extends FragmentActivity {
             public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
             }
         };
-
         //Create the tabs
         Tab tab = theActionBar.newTab().setText("All").setTabListener(tabListener);
+        View theView = View.inflate(getApplicationContext(), R.layout.tab_customview, null);
+        tab.setCustomView(theView);
         theActionBar.addTab(tab);
 
         tab = theActionBar.newTab().setText("Asana").setTabListener(tabListener);
