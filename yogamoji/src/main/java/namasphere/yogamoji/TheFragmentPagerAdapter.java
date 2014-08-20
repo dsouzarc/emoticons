@@ -344,6 +344,13 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
             removeParent(animationsLayout);
+            try {
+                animationsLayout.addView(new ShowGifView(getActivity().getApplicationContext(),
+                        getActivity().getAssets().open("gifs/Awake.gif")));
+            }
+            catch (Exception e) {
+                makeToast(e.toString());
+            }
             theScroll.addView(animationsLayout);
             return rootInflater;
         }
