@@ -13,10 +13,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.util.DisplayMetrics;
 import android.view.View;
 //TODO: Add Contextual menu for selecting multiple Yogamojis
 

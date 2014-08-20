@@ -1,19 +1,12 @@
 package namasphere.yogamoji;
 
 import android.content.Context;
-import android.widget.GridLayout;
-
-import android.util.DisplayMetrics;
 import android.content.Intent;
-import android.graphics.Point;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -25,8 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -45,12 +39,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public static final String ALL_KEY = "all";
     public static final String ASANA_KEY = "asana";
-    public static final String LOGOSBACKGROUNDS_KEY = "logos";
+    public static final String ANIMATIONS_KEY = "animations";
     public static final String PHRASES_KEY = "phrases";
     public static final String SYMBOLS_KEY = "symbols";
 
     public static final String ASANA = "asana.txt";
-    public static final String LOGOSBACKGROUNDS = "logos_and_backgrounds.txt";
+    public static final String ANIMATIONS = "animations.txt";
     public static final String PHRASES = "phrases.txt";
     public static final String SYMBOLS = "symbols.txt";
 
@@ -67,8 +61,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final Context theC;
     private final AssetManager theAssets;
 
-    private final String[] allNames, asanaNames, logosNames, phrasesNames, symbolsNames;
-    private final GridLayout allLayout, asanaLayout, logosLayout, phrasesLayout, symbolsLayout;
+    private final String[] allNames, asanaNames, animationsNames, phrasesNames, symbolsNames;
+    private final GridLayout allLayout, asanaLayout, animationsLayout, phrasesLayout, symbolsLayout;
 
     private final int width, height, imageWidth, imageHeight;
 
@@ -92,26 +86,26 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         imageParams.width = LayoutParams.WRAP_CONTENT;
 
         asanaNames = getEmojiNamesList(ASANA);
-        logosNames = getEmojiNamesList(LOGOSBACKGROUNDS);
+        animationsNames = getEmojiNamesList(ANIMATIONS);
         phrasesNames = getEmojiNamesList(PHRASES);
         symbolsNames = getEmojiNamesList(SYMBOLS);
         allNames = getAllNames();
 
         allLayout = new GridLayout(theC);
         asanaLayout = new GridLayout(theC);
-        logosLayout = new GridLayout(theC);
+        animationsLayout = new GridLayout(theC);
         phrasesLayout = new GridLayout(theC);
         symbolsLayout = new GridLayout(theC);
 
         allLayout.setLayoutParams(gridParams);
         asanaLayout.setLayoutParams(gridParams);
-        logosLayout.setLayoutParams(gridParams);
+        animationsLayout.setLayoutParams(gridParams);
         phrasesLayout.setLayoutParams(gridParams);
         symbolsLayout.setLayoutParams(gridParams);
 
         allLayout.setColumnCount(3);
         asanaLayout.setColumnCount(3);
-        logosLayout.setColumnCount(3);
+        animationsLayout.setColumnCount(3);
         phrasesLayout.setColumnCount(3);
         symbolsLayout.setColumnCount(3);
 
@@ -119,7 +113,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         allLayout.setRowCount(allNames.length + 1);
         asanaLayout.setRowCount(asanaNames.length + 1);
-        logosLayout.setRowCount(logosNames.length + 1);
+        animationsLayout.setRowCount(animationsNames.length + 1);
         phrasesLayout.setRowCount(phrasesNames.length + 1);
         symbolsLayout.setRowCount(symbolsNames.length + 1);
 
@@ -182,7 +176,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private void getAllDrawables() {
         theImages.put(ALL_KEY, new Bitmap[allNames.length]);
         theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
-        theImages.put(LOGOSBACKGROUNDS_KEY, new Bitmap[logosNames.length]);
+        theImages.put(ANIMATIONS_KEY, new Bitmap[animationsNames.length]);
         theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
         theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
 
@@ -192,9 +186,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
         }
 
-        for(int i = 0; i < logosNames.length; i++, counter++) {
-            new EmojiAdder(LOGOSBACKGROUNDS_KEY, i, counter).execute(logosNames[i]);
-        }
+        /*for(int i = 0; i < animationsNames.length; i++, counter++) {
+            new EmojiAdder(ANIMATIONS_KEY, i, counter).execute(animationsNames[i]);
+        }*/
 
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
             new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
@@ -260,9 +254,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
             }
-            else if(tag_name.equals(LOGOSBACKGROUNDS_KEY)) {
-                logosLayout.addView(theImage1);
-            }
+            /*else if(tag_name.equals(ANIMATIONS_KEY)) {
+                animationsLayout.addView(theImage1);
+            }*/
             else if(tag_name.equals(PHRASES_KEY)) {
                 phrasesLayout.addView(theImage1);
             }
@@ -301,10 +295,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 return theAE;
 
             case 2:
-                final LogosBackgroundsEmojis theLogos = new LogosBackgroundsEmojis();
+                final AnimationEmojis theAnimations = new AnimationEmojis();
                 data.putInt("current_page", tabSelected + 1);
-                theLogos.setArguments(data);
-                return theLogos;
+                theAnimations.setArguments(data);
+                return theAnimations;
 
             case 3:
                 PhrasesEmojis thePhrases = new PhrasesEmojis();
@@ -344,13 +338,13 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    public class LogosBackgroundsEmojis extends EmojiList {
+    public class AnimationEmojis extends EmojiList {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final View rootInflater = inflater.inflate(R.layout.logos_backgrounds_emojis, container, false);
+            final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-            removeParent(logosLayout);
-            theScroll.addView(logosLayout);
+            removeParent(animationsLayout);
+            theScroll.addView(animationsLayout);
             return rootInflater;
         }
     }
@@ -416,7 +410,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private String[] getAllNames() {
         final LinkedList<String> theNames = new LinkedList<String>();
         theNames.addAll(Arrays.asList(asanaNames));
-        theNames.addAll(Arrays.asList(logosNames));
         theNames.addAll(Arrays.asList(phrasesNames));
         theNames.addAll(Arrays.asList(symbolsNames));
         return theNames.toArray(new String[theNames.size()]);
