@@ -186,9 +186,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
         }
 
-        /*for(int i = 0; i < animationsNames.length; i++, counter++) {
-            new EmojiAdder(ANIMATIONS_KEY, i, counter).execute(animationsNames[i]);
-        }*/
+        for(int i = 0; i < animationsNames.length; i++) {
 
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
             new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
@@ -197,6 +195,33 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         for(int i = 0; i < symbolsNames.length; i++, counter++) {
             new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
         }
+    }
+
+    protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
+
+        @Override
+        protected ShowGifView doInBackground(String... params) {
+            try {
+                return new ShowGifView(theC, theAssets.open("gifs/" + params[0]));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+
+        @Override
+        public void onPostExecute(final ShowGifView theGif) {
+            if (theGif == null) {
+                log("Return");
+                return;
+            }
+
+
+        }
+
+
     }
 
 
@@ -254,9 +279,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
             }
-            /*else if(tag_name.equals(ANIMATIONS_KEY)) {
-                animationsLayout.addView(theImage1);
-            }*/
             else if(tag_name.equals(PHRASES_KEY)) {
                 phrasesLayout.addView(theImage1);
             }
@@ -266,14 +288,18 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     };
 
-    private void setImageParams(final ImageView theImage) {
+    private void setImageParams(final View theImage) {
         theImage.setMinimumHeight(imageHeight);
-        theImage.setMaxHeight(imageHeight);
-        theImage.setMaxWidth(imageWidth);
         theImage.setMinimumWidth(imageWidth);
         theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 2);
-        theImage.setCropToPadding(true);
         theImage.setOnClickListener(SendEmojiListener);
+
+        if(theImage instanceof ImageView) {
+            final ImageView image = (ImageView) theImage;
+            image.setCropToPadding(true);
+            image.setMaxHeight(imageHeight);
+            image.setMaxWidth(imageWidth);
+        }
     }
 
     @Override

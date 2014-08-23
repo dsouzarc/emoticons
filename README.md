@@ -1,1 +1,0 @@
-Yogamoji! Android Application
