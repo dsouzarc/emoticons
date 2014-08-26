@@ -12,9 +12,10 @@ import android.graphics.Canvas;
 import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.widget.*;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-public class ShowGifView extends View {
+public class ShowGifView extends ImageView {
 
     // Set true to use decodeStream
 // Set false to use decodeByteArray

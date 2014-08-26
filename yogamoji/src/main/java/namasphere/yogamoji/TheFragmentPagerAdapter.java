@@ -208,7 +208,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             try {
                 return new ShowGifView(theC, theAssets.open("gifs/" + params[0]));
             }
-
             catch (Exception e) {
                 e.printStackTrace();
             }
@@ -222,10 +221,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 log("Return");
                 return;
             }
-
-            GridLayout.LayoutParams theGL = new GridLayout.LayoutParams(new LayoutParams(100, 100));
-            theGif.setLayoutParams(theGL);
-
+            theGif.setAdjustViewBounds(true);
+            theGif.setMaxHeight(100);
+            theGif.setMaxWidth(100);
             animationsLayout.addView(theGif);
         }
     }
