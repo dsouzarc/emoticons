@@ -111,7 +111,7 @@ public class YogaMojiHome extends FragmentActivity {
         theActionBar.addTab(tab);
 
         tab = theActionBar.newTab().setText("Asana").setTabListener(tabListener);
-        tab.setIcon(getDrawable("yoga_asana.png"));
+
         theActionBar.addTab(tab);
 
         tab = theActionBar.newTab().setText("Animations").setTabListener(tabListener);
