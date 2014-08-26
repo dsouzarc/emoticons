@@ -82,9 +82,11 @@ public class YogaMojiHome extends FragmentActivity {
                 switch(tab.getPosition()) {
                     case 0:
                         theActionBar.setTitle("All Yogamojis!");
+                        theActionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_all));
                         break;
                     case 1:
                         theActionBar.setTitle("Asana Yogamojis!");
+                        theActionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_all));
                         break;
                     case 2:
                         theActionBar.setTitle("Yogamoji Animations!");
