@@ -115,6 +115,5 @@ public class ShowGifView extends View {
             invalidate();
 
         }
-
     }
 }
