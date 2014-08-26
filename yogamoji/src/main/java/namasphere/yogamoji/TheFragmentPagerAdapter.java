@@ -188,6 +188,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         for(int i = 0; i < animationsNames.length; i++) {
 
+        }
+
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
             new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
         }
@@ -217,7 +219,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 log("Return");
                 return;
             }
-
 
         }
 
@@ -286,7 +287,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 symbolsLayout.addView(theImage1);
             }
         }
-    };
+    }
 
     private void setImageParams(final View theImage) {
         theImage.setMinimumHeight(imageHeight);
@@ -371,8 +372,18 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
             removeParent(animationsLayout);
             try {
-                animationsLayout.addView(new ShowGifView(getActivity().getApplicationContext(),
-                        getActivity().getAssets().open("gifs/Awake.gif")));
+                final ShowGifView temp = new ShowGifView(getActivity().getApplicationContext(),
+                        getActivity().getAssets().open("gifs/Awake.gif"));
+                temp.setMinimumWidth(SIZE);
+                temp.setMinimumHeight(SIZE);
+
+                LayoutParams theP = temp.getLayoutParams();
+                theP.width = SIZE;
+                theP.height = SIZE;
+
+                //temp.setLayoutParams(theP);
+
+                animationsLayout.addView(temp);
             }
             catch (Exception e) {
                 makeToast(e.toString());

@@ -47,8 +47,8 @@ public class ShowGifView extends View {
         setFocusable(true);
 
         gifMovie = null;
-        movieWidth = 0;
-        movieHeight = 0;
+        movieWidth = 500;
+        movieHeight = 500;
         movieDuration = 0;
 
         if (DECODE_STREAM) {
@@ -57,8 +57,10 @@ public class ShowGifView extends View {
             byte[] array = streamToBytes(io);
             gifMovie = Movie.decodeByteArray(array, 0, array.length);
         }
+        this.setMeasuredDimension(500, 500);
         movieWidth = gifMovie.width();
         movieHeight = gifMovie.height();
+
         movieDuration = gifMovie.duration();
     }
 
@@ -110,7 +112,6 @@ public class ShowGifView extends View {
             int relTime = (int) ((now - mMovieStart) % dur);
 
             gifMovie.setTime(relTime);
-
             gifMovie.draw(canvas, 0, 0);
             invalidate();
 
