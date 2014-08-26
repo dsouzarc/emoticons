@@ -380,24 +380,13 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 temp.setMinimumWidth(SIZE);
                 temp.setMinimumHeight(SIZE);
 
-                LayoutParams theP = new android.view.ViewGroup.LayoutParams(1000,
-                        1000);
+                LayoutParams theP = new LayoutParams(1000, 1000);
                 theP.width = 1000;
                 theP.height = 1000;
-
                 temp.setLayoutParams(theP);
 
-                getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
-                VideoView videoHolder = new VideoView(getActivity().getApplicationContext());
-
-                videoHolder.setMediaController(new MediaController(getActivity().getApplicationContext()));
-                Uri video = Uri.parse("file:///android_asset/halflifestretch.mp4");
-                videoHolder.setVideoURI(video);
-                videoHolder.start();
 
                 animationsLayout.addView(temp);
-                animationsLayout.addView(videoHolder);
-
             }
             catch (Exception e) {
                 makeToast(e.toString());
