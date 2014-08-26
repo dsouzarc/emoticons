@@ -6,8 +6,11 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.VideoView;
+import android.widget.MediaController;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -377,11 +380,23 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 temp.setMinimumWidth(SIZE);
                 temp.setMinimumHeight(SIZE);
 
-                LayoutParams theP = temp.getLayoutParams();
-                theP.width = SIZE;
-                theP.height = SIZE;
+                LayoutParams theP = new android.view.ViewGroup.LayoutParams(1000,
+                        1000);
+                theP.width = 1000;
+                theP.height = 1000;
 
-                //temp.setLayoutParams(theP);
+                temp.setLayoutParams(theP);
+
+                getWindow().setFormat(PixelFormat.TRANSLUCENT);
+                VideoView videoHolder = new VideoView(this);
+
+                videoHolder.setMediaController(new MediaController(this));
+                Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
+                        + R.raw.your_raw_file); //do not add any extension
+                videoHolder.setVideoURI(video);
+                setContentView(videoHolder);
+                videoHolder.start();
+
 
                 animationsLayout.addView(temp);
             }

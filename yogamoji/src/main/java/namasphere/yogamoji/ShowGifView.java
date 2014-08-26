@@ -57,7 +57,7 @@ public class ShowGifView extends View {
             byte[] array = streamToBytes(io);
             gifMovie = Movie.decodeByteArray(array, 0, array.length);
         }
-        this.setMeasuredDimension(500, 500);
+        this.setMeasuredDimension(1000, 1000);
         movieWidth = gifMovie.width();
         movieHeight = gifMovie.height();
 
