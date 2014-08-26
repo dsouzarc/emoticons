@@ -190,7 +190,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         for(int i = 0; i < animationsNames.length; i++) {
-
+            new AnimationAdder().execute(animationsNames[i]);
         }
 
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
@@ -203,12 +203,12 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
-
         @Override
         protected ShowGifView doInBackground(String... params) {
             try {
                 return new ShowGifView(theC, theAssets.open("gifs/" + params[0]));
             }
+            
             catch (Exception e) {
                 e.printStackTrace();
             }
@@ -223,9 +223,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 return;
             }
 
+            animationsLayout.addView(theGif);
         }
-
-
     }
 
 
@@ -374,23 +373,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
             removeParent(animationsLayout);
-            try {
-                final ShowGifView temp = new ShowGifView(getActivity().getApplicationContext(),
-                        getActivity().getAssets().open("gifs/Half-Lift-Stretch.gif"));
-                temp.setMinimumWidth(SIZE);
-                temp.setMinimumHeight(SIZE);
-
-                LayoutParams theP = new LayoutParams(1000, 1000);
-                theP.width = 1000;
-                theP.height = 1000;
-                temp.setLayoutParams(theP);
-
-
-                animationsLayout.addView(temp);
-            }
-            catch (Exception e) {
-                makeToast(e.toString());
-            }
             theScroll.addView(animationsLayout);
             return rootInflater;
         }
