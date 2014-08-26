@@ -208,7 +208,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             try {
                 return new ShowGifView(theC, theAssets.open("gifs/" + params[0]));
             }
-            
+
             catch (Exception e) {
                 e.printStackTrace();
             }
@@ -222,7 +222,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 log("Return");
                 return;
             }
-
             animationsLayout.addView(theGif);
         }
     }
