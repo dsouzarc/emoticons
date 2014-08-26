@@ -222,6 +222,10 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 log("Return");
                 return;
             }
+
+            GridLayout.LayoutParams theGL = new GridLayout.LayoutParams(new LayoutParams(100, 100));
+            theGif.setLayoutParams(theGL);
+
             animationsLayout.addView(theGif);
         }
     }

@@ -13,7 +13,7 @@ import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
-
+import android.view.ViewGroup.LayoutParams;
 public class ShowGifView extends View {
 
     // Set true to use decodeStream
@@ -113,7 +113,6 @@ public class ShowGifView extends View {
             gifMovie.setTime(relTime);
             gifMovie.draw(canvas, 0, 0);
             invalidate();
-
         }
     }
 }
