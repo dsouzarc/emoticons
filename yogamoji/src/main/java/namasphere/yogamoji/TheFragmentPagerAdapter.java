@@ -376,7 +376,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             removeParent(animationsLayout);
             try {
                 final ShowGifView temp = new ShowGifView(getActivity().getApplicationContext(),
-                        getActivity().getAssets().open("gifs/Awake.gif"));
+                        getActivity().getAssets().open("gifs/Half-Lift-Stretch.gif"));
                 temp.setMinimumWidth(SIZE);
                 temp.setMinimumHeight(SIZE);
 
@@ -387,18 +387,17 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
                 temp.setLayoutParams(theP);
 
-                getWindow().setFormat(PixelFormat.TRANSLUCENT);
-                VideoView videoHolder = new VideoView(this);
+                getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
+                VideoView videoHolder = new VideoView(getActivity().getApplicationContext());
 
-                videoHolder.setMediaController(new MediaController(this));
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
-                        + R.raw.your_raw_file); //do not add any extension
+                videoHolder.setMediaController(new MediaController(getActivity().getApplicationContext()));
+                Uri video = Uri.parse("file:///android_asset/halflifestretch.mp4");
                 videoHolder.setVideoURI(video);
-                setContentView(videoHolder);
                 videoHolder.start();
 
-
                 animationsLayout.addView(temp);
+                animationsLayout.addView(videoHolder);
+
             }
             catch (Exception e) {
                 makeToast(e.toString());
