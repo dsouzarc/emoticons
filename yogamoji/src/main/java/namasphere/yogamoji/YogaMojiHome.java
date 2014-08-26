@@ -87,7 +87,7 @@ public class YogaMojiHome extends FragmentActivity {
                         theActionBar.setTitle("Asana Yogamojis!");
                         break;
                     case 2:
-                        theActionBar.setTitle("Yogamoji Logos and Backgrounds!");
+                        theActionBar.setTitle("Yogamoji Animations!");
                         break;
                     case 3:
                         theActionBar.setTitle("Yogamoji Phrases!");
@@ -115,7 +115,7 @@ public class YogaMojiHome extends FragmentActivity {
         tab.setIcon(getDrawable("yoga_asana.png"));
         theActionBar.addTab(tab);
 
-        tab = theActionBar.newTab().setText("Logos & Backgrounds").setTabListener(tabListener);
+        tab = theActionBar.newTab().setText("Animations").setTabListener(tabListener);
         theActionBar.addTab(tab);
 
         tab = theActionBar.newTab().setText("Phrases").setTabListener(tabListener);
