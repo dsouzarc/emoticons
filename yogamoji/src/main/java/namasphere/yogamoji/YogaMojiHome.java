@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.ImageView;
 
 public class YogaMojiHome extends FragmentActivity {
 
@@ -25,8 +27,14 @@ public class YogaMojiHome extends FragmentActivity {
 
     private ActionBar theActionBar;
     private ViewPager theViewPager;
-    private static Context theC;
+    private Context theC;
     private AssetManager theAssets;
+
+    private static final String ALL = "All";
+    private static final String ASANA = "Asana";
+    private static final String ANIMATIONS = "Animations";
+    private static final String PHRASES = "Phrases";
+    private static final String SYMBOLS = "Symbols";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,23 +113,57 @@ public class YogaMojiHome extends FragmentActivity {
             }
         };
         //Create the tabs
-        Tab tab = theActionBar.newTab().setText("All").setTabListener(tabListener);
-        View theView = View.inflate(getApplicationContext(), R.layout.all_activity_tab, null);
-        tab.setCustomView(theView);
+        Tab tab = theActionBar.newTab().setText(ALL).setTabListener(tabListener);
+        tab.setCustomView(getTab(ALL));
         theActionBar.addTab(tab);
 
-        tab = theActionBar.newTab().setText("Asana").setTabListener(tabListener);
-
+        tab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
+        tab.setCustomView(getTab(ASANA));
         theActionBar.addTab(tab);
 
-        tab = theActionBar.newTab().setText("Animations").setTabListener(tabListener);
+        tab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
+        tab.setCustomView(getTab(ANIMATIONS));
         theActionBar.addTab(tab);
 
-        tab = theActionBar.newTab().setText("Phrases").setTabListener(tabListener);
+        tab = theActionBar.newTab().setText(PHRASES).setTabListener(tabListener);
+        tab.setCustomView(getTab(PHRASES));
         theActionBar.addTab(tab);
 
-        tab = theActionBar.newTab().setText("Symbols").setTabListener(tabListener);
+        tab = theActionBar.newTab().setText(SYMBOLS).setTabListener(tabListener);
+        tab.setCustomView(getTab(SYMBOLS));
         theActionBar.addTab(tab);
+    }
+
+    private View getTab(final String type) {
+        final View theView = View.inflate(getApplicationContext(), R.layout.generic_activity_tab, null);
+        final ImageView theImage = (ImageView) theView.findViewById(R.id.icon);
+        final TextView theText = (TextView) theView.findViewById(R.id.title);
+
+        theText.setText(type);
+
+        if(type.equals(ALL)) {
+            theImage.setImageDrawable(getDrawable("icons/all.png"));
+        }
+        else if(type.equals(ANIMATIONS)) {
+            theText.setTextSize(15);
+            theImage.setImageDrawable(getDrawable("icons/animation.png"));
+        }
+        else if(type.equals(ASANA)) {
+            theImage.setImageDrawable(getDrawable("icons/asana.png"));
+        }
+        else if(type.equals(PHRASES)) {
+            theText.setTextSize(18);
+            theImage.setImageDrawable(getDrawable("icons/phrases.png"));
+        }
+        else if(type.equals(SYMBOLS)) {
+            theText.setTextSize(18);
+            theImage.setImageDrawable(getDrawable("icons/symbols.png"));
+        }
+        else {
+            theImage.setImageDrawable(null);
+        }
+
+        return theView;
     }
 
     public Drawable getDrawable(final String assetFileName) {
