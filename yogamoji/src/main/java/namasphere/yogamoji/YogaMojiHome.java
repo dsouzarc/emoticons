@@ -21,8 +21,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.os.AsyncTask;
-import android.app.FragmentTransaction;
+
 public class YogaMojiHome extends FragmentActivity {
+
+    private static final String ALL = "All";
+    private static final String ASANA = "Asana";
+    private static final String ANIMATIONS = "Animations";
+    private static final String PHRASES = "Phrases";
+    private static final String SYMBOLS = "Symbols";
 
     private static final int SIZE = 200;
 
@@ -30,12 +36,6 @@ public class YogaMojiHome extends FragmentActivity {
     private ViewPager theViewPager;
     private Context theC;
     private AssetManager theAssets;
-
-    private static final String ALL = "All";
-    private static final String ASANA = "Asana";
-    private static final String ANIMATIONS = "Animations";
-    private static final String PHRASES = "Phrases";
-    private static final String SYMBOLS = "Symbols";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +119,28 @@ public class YogaMojiHome extends FragmentActivity {
         }
     };
 
+    private View getTab(final String type) {
+
+        final View theView = View.inflate(getApplicationContext(), R.layout.generic_activity_tab, null);
+        final ImageView theImage = (ImageView) theView.findViewById(R.id.icon);
+        final TextView theText = (TextView) theView.findViewById(R.id.title);
+
+        theText.setText(type);
+
+        if(type.equals(ANIMATIONS)) {
+            theText.setTextSize(15);
+        }
+        else if(type.equals(PHRASES)) {
+            theText.setTextSize(18);
+        }
+        else if(type.equals(SYMBOLS)) {
+            theText.setTextSize(18);
+        }
+        theImage.setImageDrawable(getDrawable("icons/" + type + ".png"));
+
+        return theView;
+    }
+
     private class AddTabTask extends AsyncTask<Void, Void, Drawable> {
         private final String fileName;
         private final int position;
@@ -138,38 +160,6 @@ public class YogaMojiHome extends FragmentActivity {
             theTab.setCustomView(getTab(fileName));
             theActionBar.addTab(theTab, position);
         }
-    }
-
-    private View getTab(final String type) {
-        final View theView = View.inflate(getApplicationContext(), R.layout.generic_activity_tab, null);
-        final ImageView theImage = (ImageView) theView.findViewById(R.id.icon);
-        final TextView theText = (TextView) theView.findViewById(R.id.title);
-
-        theText.setText(type);
-
-        if(type.equals(ALL)) {
-            theImage.setImageDrawable(getDrawable("icons/all.png"));
-        }
-        else if(type.equals(ANIMATIONS)) {
-            theText.setTextSize(15);
-            theImage.setImageDrawable(getDrawable("icons/animation.png"));
-        }
-        else if(type.equals(ASANA)) {
-            theImage.setImageDrawable(getDrawable("icons/asana.png"));
-        }
-        else if(type.equals(PHRASES)) {
-            theText.setTextSize(18);
-            theImage.setImageDrawable(getDrawable("icons/phrases.png"));
-        }
-        else if(type.equals(SYMBOLS)) {
-            theText.setTextSize(18);
-            theImage.setImageDrawable(getDrawable("icons/symbols.png"));
-        }
-        else {
-            theImage.setImageDrawable(null);
-        }
-
-        return theView;
     }
 
     public Drawable getDrawable(final String assetFileName) {
