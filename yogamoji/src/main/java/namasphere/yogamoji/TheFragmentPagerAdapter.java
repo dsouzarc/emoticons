@@ -31,9 +31,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-
-//TODO: Each fragment gets its own GridLayout, global variable, basically replace with LinearLayout
-//TODO: LayoutParams are also global variables
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -57,6 +55,8 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final HashMap<String, Bitmap[]> theImages = new HashMap<String, Bitmap[]>();
     private final HashMap<ImageView, Integer> theViews = new HashMap<ImageView, Integer>();
+
+    private final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
     private final Context theC;
     private final AssetManager theAssets;
@@ -145,7 +145,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final Bitmap theImage = theImages.get(ALL_KEY)[counter];
 
             try {
-                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                 File imageFile = new File(path, "Yogamoji!" + ".png");
                 FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
