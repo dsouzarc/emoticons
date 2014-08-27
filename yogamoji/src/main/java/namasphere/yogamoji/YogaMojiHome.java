@@ -20,7 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ImageView;
-
+import android.os.AsyncTask;
+import android.app.FragmentTransaction;
 public class YogaMojiHome extends FragmentActivity {
 
     private static final int SIZE = 200;
@@ -74,64 +75,69 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager.setAdapter(fragmentPagerAdapter);
         theActionBar.setDisplayShowTitleEnabled(true);
 
-        //Tab listener
-        final ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-
-            @Override
-            public void onTabReselected(Tab arg0, android.app.FragmentTransaction arg1) {
-
-            }
-
-            @Override
-            public void onTabSelected(Tab tab, FragmentTransaction ft) {
-                theViewPager.setCurrentItem(tab.getPosition());
-
-                switch(tab.getPosition()) {
-                    case 0:
-                        theActionBar.setTitle("All Yogamojis!");
-                        break;
-                    case 1:
-                        theActionBar.setTitle("Asana Yogamojis!");
-                        break;
-                    case 2:
-                        theActionBar.setTitle("Yogamoji Animations!");
-                        break;
-                    case 3:
-                        theActionBar.setTitle("Yogamoji Phrases!");
-                        break;
-                    case 4:
-                        theActionBar.setTitle("Yogamoji Symbols!");
-                        break;
-                    default:
-                        theActionBar.setTitle("Yogamojis!");
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
-            }
-        };
         //Create the tabs
-        Tab tab = theActionBar.newTab().setText(ALL).setTabListener(tabListener);
-        tab.setCustomView(getTab(ALL));
-        theActionBar.addTab(tab);
+        new AddTabTask(ALL, 1).execute();
+        new AddTabTask(ANIMATIONS, 2).execute();
+        new AddTabTask(ASANA, 3).execute();
+        new AddTabTask(PHRASES, 4).execute();
+        new AddTabTask(SYMBOLS, 5).execute();
+    }
 
-        tab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
-        tab.setCustomView(getTab(ASANA));
-        theActionBar.addTab(tab);
+    //Tab listener
+    private final ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+        @Override
+        public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+        }
+        @Override
+        public void onTabSelected(Tab tab, FragmentTransaction ft) {
+            theViewPager.setCurrentItem(tab.getPosition());
 
-        tab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
-        tab.setCustomView(getTab(ANIMATIONS));
-        theActionBar.addTab(tab);
+            switch(tab.getPosition()) {
+                case 0:
+                    theActionBar.setTitle("All Yogamojis!");
+                    break;
+                case 1:
+                    theActionBar.setTitle("Asana Yogamojis!");
+                    break;
+                case 2:
+                    theActionBar.setTitle("Yogamoji Animations!");
+                    break;
+                case 3:
+                    theActionBar.setTitle("Yogamoji Phrases!");
+                    break;
+                case 4:
+                    theActionBar.setTitle("Yogamoji Symbols!");
+                    break;
+                default:
+                    theActionBar.setTitle("Yogamojis!");
+                    break;
+            }
+        }
 
-        tab = theActionBar.newTab().setText(PHRASES).setTabListener(tabListener);
-        tab.setCustomView(getTab(PHRASES));
-        theActionBar.addTab(tab);
+        @Override
+        public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
+        }
+    };
 
-        tab = theActionBar.newTab().setText(SYMBOLS).setTabListener(tabListener);
-        tab.setCustomView(getTab(SYMBOLS));
-        theActionBar.addTab(tab);
+    private class AddTabTask extends AsyncTask<Void, Void, Drawable> {
+        private final String fileName;
+        private final int position;
+
+        public AddTabTask(final String fileName, final int position) {
+            this.fileName = fileName;
+            this.position = position;
+        }
+
+        @Override
+        public Drawable doInBackground(Void... params) {
+            return getDrawable(fileName);
+        }
+        @Override
+        public void onPostExecute(final Drawable theImage) {
+            final Tab theTab = theActionBar.newTab().setText(fileName).setTabListener(tabListener);
+            theTab.setCustomView(getTab(fileName));
+            theActionBar.addTab(theTab, position);
+        }
     }
 
     private View getTab(final String type) {
