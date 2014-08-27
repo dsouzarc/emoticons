@@ -147,7 +147,7 @@ public class YogaMojiHome extends FragmentActivity {
         }
         else if(type.equals(ANIMATIONS)) {
             theText.setText("GIFS");
-            theImage.setImageBitmap(getDrawable("icons/animations.png"));
+            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_animations);
         }
         else if(type.equals(ASANA)) {
             theImage.setImageBitmap(getDrawable("icons/asana.png"));
