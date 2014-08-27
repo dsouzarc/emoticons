@@ -106,7 +106,7 @@ public class YogaMojiHome extends FragmentActivity {
         };
         //Create the tabs
         Tab tab = theActionBar.newTab().setText("All").setTabListener(tabListener);
-        View theView = View.inflate(getApplicationContext(), R.layout.tab_customview, null);
+        View theView = View.inflate(getApplicationContext(), R.layout.all_activity_tab, null);
         tab.setCustomView(theView);
         theActionBar.addTab(tab);
 
