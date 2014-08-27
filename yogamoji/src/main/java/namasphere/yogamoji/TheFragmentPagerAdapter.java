@@ -77,9 +77,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         this.height = height;
         this.SIDE_MARGIN = (this.width - (3 * SIZE))/5;
         this.imageWidth = (this.width - (3 * SIZE))/3;
-
-        //this.SIDE_MARGIN = 35; //(int) (width * 0.1);
-        //this.imageWidth = (int) (0.1 * (width - (SIDE_MARGIN)));
         this.imageHeight = imageWidth;
         log("WiDTH\t" + imageWidth + " HEIGhT\t" + imageHeight);
 

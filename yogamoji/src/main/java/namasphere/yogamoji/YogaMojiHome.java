@@ -1,6 +1,7 @@
 package namasphere.yogamoji;
 
 import android.app.ActionBar;
+import android.content.res.Resources;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -36,6 +37,7 @@ public class YogaMojiHome extends FragmentActivity {
     private ViewPager theViewPager;
     private Context theC;
     private AssetManager theAssets;
+    private Resources theResources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class YogaMojiHome extends FragmentActivity {
 
         theC = getApplicationContext();
         theAssets = theC.getAssets();
+        theResources = theC.getResources();
 
         theActionBar = getActionBar();
         theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -76,11 +79,11 @@ public class YogaMojiHome extends FragmentActivity {
         theActionBar.setDisplayShowTitleEnabled(true);
 
         //Create the tabs
-        new AddTabTask(ALL, 1).execute();
-        new AddTabTask(ANIMATIONS, 2).execute();
-        new AddTabTask(ASANA, 3).execute();
-        new AddTabTask(PHRASES, 4).execute();
-        new AddTabTask(SYMBOLS, 5).execute();
+        new AddTabTask(ALL, 0).execute();
+        new AddTabTask(ANIMATIONS, 1).execute();
+        new AddTabTask(ASANA, 2).execute();
+        new AddTabTask(PHRASES, 3).execute();
+        new AddTabTask(SYMBOLS, 4).execute();
     }
 
     //Tab listener
@@ -120,7 +123,6 @@ public class YogaMojiHome extends FragmentActivity {
     };
 
     private View getTab(final String type) {
-
         final View theView = View.inflate(getApplicationContext(), R.layout.generic_activity_tab, null);
         final ImageView theImage = (ImageView) theView.findViewById(R.id.icon);
         final TextView theText = (TextView) theView.findViewById(R.id.title);
@@ -128,32 +130,30 @@ public class YogaMojiHome extends FragmentActivity {
         theText.setText(type);
 
         if(type.equals(ALL)) {
-            theImage.setImageDrawable(getDrawable("icons/all.png"));
+            theImage.setImageBitmap(getDrawable("icons/all.png"));
         }
         else if(type.equals(ANIMATIONS)) {
-            theText.setTextSize(15);
-            theImage.setImageDrawable(getDrawable("icons/animation.png"));
+            theText.setText("GIFS");
+            theImage.setImageBitmap(getDrawable("icons/animations.png"));
         }
         else if(type.equals(ASANA)) {
-            theImage.setImageDrawable(getDrawable("icons/asana.png"));
+            theImage.setImageBitmap(getDrawable("icons/asana.png"));
         }
         else if(type.equals(PHRASES)) {
             theText.setTextSize(18);
-            theImage.setImageDrawable(getDrawable("icons/phrases.png"));
+            theImage.setImageBitmap(getDrawable("icons/phrases.png"));
         }
         else if(type.equals(SYMBOLS)) {
             theText.setTextSize(18);
-            theImage.setImageDrawable(getDrawable("icons/symbols.png"));
+            theImage.setImageBitmap(getDrawable("icons/symbols.png"));
         }
         else {
             theImage.setImageDrawable(null);
         }
-
-
         return theView;
     }
 
-    private class AddTabTask extends AsyncTask<Void, Void, Drawable> {
+    private class AddTabTask extends AsyncTask<Void, Void, Tab> {
         private final String fileName;
         private final int position;
 
@@ -163,22 +163,20 @@ public class YogaMojiHome extends FragmentActivity {
         }
 
         @Override
-        public Drawable doInBackground(Void... params) {
-            return getDrawable(fileName);
-        }
-        @Override
-        public void onPostExecute(final Drawable theImage) {
+        public Tab doInBackground(Void... params) {
             final Tab theTab = theActionBar.newTab().setText(fileName).setTabListener(tabListener);
             theTab.setCustomView(getTab(fileName));
+            return theTab;
+        }
+        @Override
+        public void onPostExecute(final Tab theTab) {
             theActionBar.addTab(theTab, position);
         }
     }
-
-    public Drawable getDrawable(final String assetFileName) {
+    public Bitmap getDrawable(final String assetFileName) {
         try {
-            return new BitmapDrawable(getApplicationContext().getResources(),
-                    Bitmap.createScaledBitmap(BitmapFactory.decodeStream
-                                    (theAssets.open(assetFileName)), SIZE, SIZE, false));
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(
+                    theAssets.open(assetFileName)), SIZE, SIZE, false);
         }
         catch(Exception e) {
             e.printStackTrace();
