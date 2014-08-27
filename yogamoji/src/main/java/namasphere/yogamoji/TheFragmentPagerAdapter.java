@@ -105,7 +105,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         allLayout.setColumnCount(3);
         asanaLayout.setColumnCount(3);
-        animationsLayout.setColumnCount(3);
+        animationsLayout.setColumnCount(2);
         phrasesLayout.setColumnCount(3);
         symbolsLayout.setColumnCount(3);
 

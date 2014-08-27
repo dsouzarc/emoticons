@@ -44,6 +44,8 @@ public class YogaMojiHome extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yoga_moji_home);
 
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
         theC = getApplicationContext();
         theAssets = theC.getAssets();
         theResources = theC.getResources();
@@ -142,22 +144,22 @@ public class YogaMojiHome extends FragmentActivity {
         theText.setText(type);
 
         if(type.equals(ALL)) {
-            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_all);
+            theImage.setImageBitmap(getDrawable("icons/all.png"));
         }
         else if(type.equals(ANIMATIONS)) {
             theText.setText("GIFS");
-            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_animations);
+            theImage.setImageBitmap(getDrawable("icons/animations.png"));
         }
         else if(type.equals(ASANA)) {
-            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_asana);
+            theImage.setImageBitmap(getDrawable("icons/asana.png"));
         }
         else if(type.equals(PHRASES)) {
             theText.setTextSize(18);
-            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_phrases);
+            theImage.setImageBitmap(getDrawable("icons/phrases.png"));
         }
         else if(type.equals(SYMBOLS)) {
             theText.setTextSize(18);
-            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_symbols);
+            theImage.setImageBitmap(getDrawable("icons/symbols.png"));
         }
         else {
             theImage.setImageDrawable(null);
