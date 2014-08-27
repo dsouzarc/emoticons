@@ -152,11 +152,11 @@ public class YogaMojiHome extends FragmentActivity {
             theImage.setImageBitmap(getDrawable("icons/asana.png"));
         }
         else if(type.equals(PHRASES)) {
-            theText.setTextSize(18);
+            theText.setTextSize(15);
             theImage.setImageBitmap(getDrawable("icons/phrases.png"));
         }
         else if(type.equals(SYMBOLS)) {
-            theText.setTextSize(18);
+            theText.setTextSize(15);
             theImage.setImageBitmap(getDrawable("icons/symbols.png"));
         }
         else {
