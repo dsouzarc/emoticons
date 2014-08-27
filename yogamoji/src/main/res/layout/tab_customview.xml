@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="0dip"
-              android:layout_height="55dip"
-              android:layout_weight="1"
-              android:orientation="horizontal"
-              android:padding="5dp">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dip"
+    android:layout_height="55dip"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    android:padding="5dp">
     <ImageView
         android:id="@+id/icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher"
         android:adjustViewBounds="true"
-        android:maxWidth="20dp"
-        android:maxHeight="20dp"
-        android:minHeight="20dp"
-        android:minWidth="20dp"
+        android:maxWidth="30dp"
+        android:maxHeight="30dp"
+        android:minHeight="30dp"
+        android:minWidth="30dp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"/>
     <TextView
@@ -23,5 +24,8 @@
         android:layout_width="fill_parent"
         android:layout_weight="1"
         android:text="All"
-        android:gravity="center_vertical"/>
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#ff000000"/>
 </LinearLayout>
