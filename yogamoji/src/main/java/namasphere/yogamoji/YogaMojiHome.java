@@ -83,14 +83,13 @@ public class YogaMojiHome extends FragmentActivity {
         theTab.setCustomView(getTab(ALL));
         theActionBar.addTab(theTab, 0);
 
-        theTab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
-        theTab.setCustomView(getTab(ANIMATIONS));
-        theActionBar.addTab(theTab, 1);
-
         theTab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
         theTab.setCustomView(getTab(ASANA));
-        theActionBar.addTab(theTab, 2);
+        theActionBar.addTab(theTab, 1);
 
+        theTab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
+        theTab.setCustomView(getTab(ANIMATIONS));
+        theActionBar.addTab(theTab, 2);
 
         //new AddTabTask(ALL, 0).execute();
         //new AddTabTask(ANIMATIONS, 1).execute();
@@ -143,22 +142,22 @@ public class YogaMojiHome extends FragmentActivity {
         theText.setText(type);
 
         if(type.equals(ALL)) {
-            theImage.setImageBitmap(getDrawable("icons/all.png"));
+            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_all);
         }
         else if(type.equals(ANIMATIONS)) {
             theText.setText("GIFS");
             theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_animations);
         }
         else if(type.equals(ASANA)) {
-            theImage.setImageBitmap(getDrawable("icons/asana.png"));
+            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_asana);
         }
         else if(type.equals(PHRASES)) {
             theText.setTextSize(18);
-            theImage.setImageBitmap(getDrawable("icons/phrases.png"));
+            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_phrases);
         }
         else if(type.equals(SYMBOLS)) {
             theText.setTextSize(18);
-            theImage.setImageBitmap(getDrawable("icons/symbols.png"));
+            theImage.setImageResource(namasphere.yogamoji.R.drawable.icon_symbols);
         }
         else {
             theImage.setImageDrawable(null);
