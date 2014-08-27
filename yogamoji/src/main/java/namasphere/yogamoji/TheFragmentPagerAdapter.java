@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import java.io.InputStream;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -198,11 +199,25 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
         @Override
         protected ShowGifView doInBackground(String... params) {
+
+            InputStream theIS = null;
+
             try {
-                return new ShowGifView(theC, theAssets.open("gifs/" + params[0]));
+                theIS = theAssets.open("gifs/" + params[0]);
+                return new ShowGifView(theC, theIS);
             }
             catch (Exception e) {
                 e.printStackTrace();
+            }
+            finally {
+                try {
+                    if (theIS != null) {
+                        theIS.close();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }
@@ -239,15 +254,28 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public Bitmap doInBackground(final String... fileName) {
             startTime = System.currentTimeMillis();
+
+            InputStream theIS = null;
+
             try {
-                return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName[0])),
+                theIS = theAssets.open("emojis/" + fileName[0]);
+                return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theIS),
                         SIZE, SIZE, false);
             }
             catch (Exception e) {
                 log(e.toString());
                 e.printStackTrace();
-                return null;
             }
+            finally {
+                if(theIS != null) {
+                    try {
+                        theIS.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
         }
 
         @Override

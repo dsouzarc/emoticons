@@ -3,11 +3,13 @@ package namasphere.yogamoji;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import java.io.InputStream;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.Gravity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -157,6 +159,7 @@ public class YogaMojiHome extends FragmentActivity {
         }
         else if(type.equals(SYMBOLS)) {
             theText.setTextSize(15);
+            theText.setGravity(Gravity.CENTER);
             theImage.setImageBitmap(getDrawable("icons/symbols.png"));
         }
         else {
@@ -186,15 +189,30 @@ public class YogaMojiHome extends FragmentActivity {
         }
     }
     public Bitmap getDrawable(final String assetFileName) {
+
+        InputStream temp = null;
+
         try {
+            temp = theAssets.open(assetFileName);
             return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(
-                    theAssets.open(assetFileName)), SIZE, SIZE, false);
+                    //theAssets.open(assetFileName)
+                    temp), SIZE, SIZE, false);
         }
-        catch(Exception e) {
+        catch (Exception e){
             e.printStackTrace();
             log(e.toString());
-            return null;
         }
+        finally {
+            if(temp != null) {
+                try {
+                    temp.close();
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
     public void log(final String message) {
