@@ -1,20 +1,13 @@
 package namasphere.yogamoji;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Movie;
-import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.widget.*;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 public class ShowGifView extends ImageView {
 
     // Set true to use decodeStream
