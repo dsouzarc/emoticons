@@ -30,10 +30,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
+public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     public static final String ALL_KEY = "all";
     public static final String ASANA_KEY = "asana";
@@ -219,7 +220,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             else if(counter <= (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {
                 phrasesLayout.addView(theView);
             }
-            else if(counter <= symbolsNames.length && counter >= (phrasesNames.length + asanaNames.length)) {
+            else if(counter >= (phrasesNames.length + asanaNames.length)) {
                 symbolsLayout.addView(theView);
             }
         }
@@ -230,7 +231,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private Bitmap getBitmap(final String fileName) {
 
         try {
-            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/fileName")), 300, 300, false);
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/fileName")), SIZE, SIZE, false);
         }
         catch (Exception e) {
             e.printStackTrace();

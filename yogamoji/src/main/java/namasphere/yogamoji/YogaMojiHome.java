@@ -4,10 +4,12 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Handler;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -67,11 +69,40 @@ public class YogaMojiHome extends FragmentActivity {
         final Window theWindow = getWindow();
 
         //listener for pageChange
-        final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener(){
+        final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 theActionBar.setSelectedNavigationItem(position);
+            }
+
+            int positionCurrent;
+            boolean dontLoadList;
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == 0) { // the viewpager is idle as swipping ended
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            if (!dontLoadList) {
+                                //async thread code to execute loading the list...
+                            }
+                        }
+                    }, 06);
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                positionCurrent = position;
+                if (positionOffset == 0 && positionOffsetPixels == 0) {
+                    // the offset is zero when the swiping ends{
+                    dontLoadList = false;
+                }
+                else {
+                    // To avoid loading content for list after swiping the pager.
+                    dontLoadList = true;
+                }
             }
         };
 
@@ -83,7 +114,6 @@ public class YogaMojiHome extends FragmentActivity {
 
         theViewPager.setAdapter(fragmentPagerAdapter);
         theActionBar.setDisplayShowTitleEnabled(true);
-
 
         Tab theTab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
         theTab.setCustomView(getTab(ASANA));
