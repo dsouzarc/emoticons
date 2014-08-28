@@ -5,8 +5,9 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.widget.VideoView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,7 +32,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -108,7 +108,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         allLayout.setRowCount(allNames.length + 1);
         asanaLayout.setRowCount(asanaNames.length + 1);
-        animationsLayout.setRowCount(animationsNames.length + 1);
+        animationsLayout.setRowCount(animationsNames.length + 2);
         phrasesLayout.setRowCount(phrasesNames.length + 1);
         symbolsLayout.setRowCount(symbolsNames.length + 1);
 
@@ -139,6 +139,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
         @Override
         public void run() {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
             final long start = System.currentTimeMillis();
 
             try {
@@ -252,7 +253,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             try {
                 theIS = theAssets.open("emojis/" + fileName[0]);
                 return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theIS),
-                        SIZE, SIZE, false);
+                      SIZE, SIZE, false);
             }
             catch (Exception e) {
                 log(e.toString());
@@ -300,18 +301,14 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    private void setImageParams(final View theImage) {
+    private void setImageParams(final ImageView theImage) {
         theImage.setMinimumHeight(imageHeight);
         theImage.setMinimumWidth(imageWidth);
         theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 2);
         theImage.setOnClickListener(SendEmojiListener);
-
-        if(theImage instanceof ImageView) {
-            final ImageView image = (ImageView) theImage;
-            image.setCropToPadding(true);
-            image.setMaxHeight(imageHeight);
-            image.setMaxWidth(imageWidth);
-        }
+        theImage.setCropToPadding(true);
+        theImage.setMaxHeight(imageHeight);
+        theImage.setMaxWidth(imageWidth);
     }
 
     @Override
