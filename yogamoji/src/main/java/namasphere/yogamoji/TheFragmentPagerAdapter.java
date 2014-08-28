@@ -168,10 +168,13 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         getImages2.start();
         final Thread getImages3 = new Thread(new GetImages(2));
         getImages3.start();
-
     }
 
     private class GetImages implements Runnable {
+
+        private final BitmapFactory.Options o = new BitmapFactory.Options();
+        private final BitmapFactory.Options o2 = new BitmapFactory.Options();
+
         private final int startAt;
 
         public GetImages(final int startAt) {
@@ -182,62 +185,28 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         public void run() {
             for(int i = startAt; i < allNames.length; i+= 3) {
                 try {
-                    new AddToDisplay(i,
-                            getBitmap(allNames[i])).execute();
+                    new AddToDisplay(i, getBitmap(allNames[i])).execute();
                 }
                 catch (Exception e) {
                     log(e.toString());
                     e.printStackTrace();
                 }
-
             }
         }
-    }
 
-    private class AddToDisplay extends AsyncTask<Void, Void, ImageView> {
-        private final int counter;
-        private final Bitmap theBM;
+        private Bitmap getBitmap(final String fileName) {
 
-        public AddToDisplay(final int counter, final Bitmap theBM) {
-            this.counter = counter;
-            this.theBM = theBM;
-        }
-
-        @Override
-        public ImageView doInBackground(Void... params) {
-            final ImageView theImage = new ImageView(theC);
-            theImage.setImageBitmap(theBM);
-            setImageParams(theImage);
-            return theImage;
-        }
-
-        @Override
-        public void onPostExecute(final ImageView theView) {
-
-            if(counter <= asanaNames.length) {
-                asanaLayout.addView(theView);
+            try {
+                return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName)),
+                        imageWidth, imageHeight, false);
             }
-            else if(counter <= (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {
-                phrasesLayout.addView(theView);
+            catch (Exception e) {
+                log("Error at getBitmap" + e.toString());
+                e.printStackTrace();
+                return null;
             }
-            else if(counter >= (phrasesNames.length + asanaNames.length)) {
-                symbolsLayout.addView(theView);
-            }
-        }
-    }
 
-    private final BitmapFactory.Options o = new BitmapFactory.Options();
-    private final BitmapFactory.Options o2 = new BitmapFactory.Options();
-    private Bitmap getBitmap(final String fileName) {
-
-        try {
-            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/fileName")), SIZE, SIZE, false);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
+            /*try {
                 o.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName), null, o);
                 //Find the correct scale value. It should be the power of 2.
@@ -255,21 +224,62 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 //decode with inSampleSize
                 o2.inSampleSize = scale;
                 return BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName), null, o2);
+            }
+            catch (Exception e) {
+                log("HERE ERROR: " + e.toString());
+                e.printStackTrace();
+                return null;
+            }*/
         }
-        catch (Exception e) {
-            log("HERE ERROR: " + e.toString());
-            e.printStackTrace();
-            return null;
+    }
 
+    private class AddToDisplay extends AsyncTask<Void, Void, ImageView> {
+        private final int counter;
+        private final Bitmap theBM;
+
+        public AddToDisplay(final int counter, final Bitmap theBM) {
+            this.counter = counter;
+            this.theBM = theBM;
+        }
+
+        @Override
+        public ImageView doInBackground(Void... params) {
+
+            if(theBM == null) {
+                log("Bitmap NULL");
+                return null;
+            }
+            final ImageView theImage = new ImageView(theC);
+            theImage.setImageBitmap(theBM);
+            setImageParams(theImage);
+            return theImage;
+        }
+
+        @Override
+        public void onPostExecute(final ImageView theView) {
+
+            if(theView == null) {
+                return;
+            }
+
+            if(counter <= asanaNames.length) {
+                asanaLayout.addView(theView);
+            }
+            else if(counter <= (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {
+                phrasesLayout.addView(theView);
+            }
+            else if(counter >= (phrasesNames.length + asanaNames.length)) {
+                symbolsLayout.addView(theView);
+            }
         }
     }
 
     private void setImageParams(final ImageView theImage) {
-        theImage.setMinimumHeight(imageHeight);
-        theImage.setMinimumWidth(imageWidth);
         theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 2);
         theImage.setOnClickListener(SendEmojiListener);
         theImage.setCropToPadding(true);
+        theImage.setMinimumHeight(imageHeight);
+        theImage.setMinimumWidth(imageWidth);
         theImage.setMaxHeight(imageHeight);
         theImage.setMaxWidth(imageWidth);
     }
