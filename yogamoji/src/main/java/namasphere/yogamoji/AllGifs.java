@@ -1,61 +1,26 @@
 package namasphere.yogamoji;
 
 import android.app.Activity;
-import java.io.ByteArrayOutputStream;
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.content.Intent;
-import java.io.OutputStream;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.widget.Button;
-import android.support.v4.app.FragmentActivity;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import java.util.Arrays;
-import java.util.LinkedList;
-
-import android.util.Log;
-import android.net.Uri;
-import android.view.Menu;
-import android.view.View.OnClickListener;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.ScrollView;
-
-import java.io.InputStream;
+import java.io.OutputStream;
 
 public class AllGifs extends Activity {
 
