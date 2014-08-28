@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.widget.Button;
+import android.support.v4.app.FragmentActivity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -347,13 +348,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             toAnimations.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
-                        toSomewhere.putExtra("fileNames", animationsNames);
-                        startActivity(toSomewhere);
-                    }
-                    catch (Exception e) {
-                    }
+                    viewAnimations(getActivity());
                 }
             });
             return rootInflater;
@@ -363,14 +358,18 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         public void setMenuVisibility(final boolean visible) {
             super.setMenuVisibility(visible);
             if (visible) {
-                try {
-                    final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
-                    toSomewhere.putExtra("fileNames", animationsNames);
-                    startActivity(toSomewhere);
-                }
-                catch (Exception e) {
-                }
+                viewAnimations(getActivity());
             }
+        }
+    }
+
+    private void viewAnimations(final FragmentActivity theActivity) {
+        try {
+            final Intent toSomewhere = new Intent(theActivity, AllGifs.class);
+            toSomewhere.putExtra("fileNames", animationsNames);
+            theActivity.startActivity(toSomewhere);
+        }
+        catch (Exception e) {
         }
     }
 
