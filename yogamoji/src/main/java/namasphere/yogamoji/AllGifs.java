@@ -62,7 +62,7 @@ public class AllGifs extends Activity {
         gridParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         gridParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         theGrid.setLayoutParams(gridParams);
-        theGrid.setColumnCount(3);
+        theGrid.setColumnCount(2);
 
         final Bundle fromPrevious = getIntent().getExtras();
         fileNames = fromPrevious.getStringArray("fileNames");

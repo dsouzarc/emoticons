@@ -331,12 +331,17 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
-
-            final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
-            toSomewhere.putExtra("fileNames", animationsNames);
-
-            startActivity(toSomewhere);
             return rootInflater;
+        }
+
+        @Override
+        public void setMenuVisibility(final boolean visible) {
+            super.setMenuVisibility(visible);
+            if (visible) {
+                final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
+                toSomewhere.putExtra("fileNames", animationsNames);
+                startActivity(toSomewhere);
+            }
         }
     }
 
