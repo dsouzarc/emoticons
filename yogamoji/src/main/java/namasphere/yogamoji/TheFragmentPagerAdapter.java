@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.widget.VideoView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
