@@ -10,8 +10,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 public class ShowGifView extends ImageView {
 
-    // Set true to use decodeStream
-// Set false to use decodeByteArray
     private static final boolean DECODE_STREAM = true;
 
     private InputStream gifInputStream;
