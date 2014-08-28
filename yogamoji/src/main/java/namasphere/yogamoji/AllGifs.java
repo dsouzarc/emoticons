@@ -1,11 +1,13 @@
 package namasphere.yogamoji;
 
 import android.app.Activity;
+import java.io.ByteArrayOutputStream;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
+import java.io.OutputStream;
 
 import android.content.Context;
 import android.content.Intent;
@@ -99,40 +101,43 @@ public class AllGifs extends Activity {
             final ShowGifView theGifView = (ShowGifView) v;
 
             try {
+                InputStream in = null;
+                OutputStream out = null;
+                try {
+                    in = theAssets.open("gifs/" + theGifView.getGifName());
+                    out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), "image.gif"));
+                    copyFile(in, out);
+                    in.close();
+                    in = null;
+                    out.flush();
+                    out.close();
+                    out = null;
+                } catch (Exception e) {
+                    Log.e("tag", e.getMessage());
+                    e.printStackTrace();
+                }
 
-                final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-                File imageFile = new File(path, "Yogamoji!" + ".gif");
-                FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
-                fileOutPutStream.write(ShowGifView.streamToBytes((theGifView.getGifInputStream())));
-                fileOutPutStream.flush();
-                fileOutPutStream.close();
-
-                /*final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
-                sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
-                sendEmoji.setType("image/png");
-
-                final Intent theSender = Intent.createChooser(sendEmoji, "Send Yogamoji using ");
-                theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
-
-
-                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
-                sendIntent.putExtra("address", "1213123123");
-                sendIntent.putExtra("sms_body", "if you are sending text");
-
-                Uri uri = Uri.fromFile(imageFile);
-                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                sendIntent.setType("video/*");
-                startActivity(sendIntent);
+                final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/html");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "File attached");
+                Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
+                emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(Intent.createChooser(emailIntent, "Send mail..."));
             }
             catch(Exception e) {
                 e.printStackTrace();
                 log("Error sending: " + e.toString());
             }
-
         }
     };
+
+    private void copyFile(InputStream in, OutputStream out) throws Exception {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+    }
 
     protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
         @Override
@@ -142,7 +147,7 @@ public class AllGifs extends Activity {
 
             try {
                 theIS = theAssets.open("gifs/" + params[0]);
-                return new ShowGifView(theC, theIS);
+                return new ShowGifView(theC, theIS, params[0]);
             }
             catch (Exception e) {
                 e.printStackTrace();

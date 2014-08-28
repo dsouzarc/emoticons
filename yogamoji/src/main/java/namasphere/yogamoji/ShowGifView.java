@@ -22,9 +22,16 @@ public class ShowGifView extends ImageView {
 
     static String gifURL;
 
-    public ShowGifView(Context context, final InputStream io) {
+    private String gifName;
+
+    public ShowGifView(Context context, final InputStream io, final String fileName) {
         super(context);
+        this.gifName = fileName;
         init(context, io);
+    }
+
+    public String getGifName() {
+        return this.gifName;
     }
 
     public ShowGifView(Context context, AttributeSet attrs, final InputStream io) {
@@ -39,12 +46,11 @@ public class ShowGifView extends ImageView {
 
     private void init(final Context context, final InputStream io) {
         setFocusable(true);
-
+        this.gifInputStream = io;
         gifMovie = null;
         movieWidth = 500;
         movieHeight = 500;
         movieDuration = 0;
-        this.gifInputStream = io;
 
         if (DECODE_STREAM) {
             gifMovie = Movie.decodeStream(io);
