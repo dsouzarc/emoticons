@@ -175,10 +175,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
         }
 
-        for(int i = 0; i < animationsNames.length; i++) {
-            new AnimationAdder().execute(animationsNames[i]);
-        }
-
         for(int i = 0; i < phrasesNames.length; i++, counter++) {
             new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
         }
@@ -187,48 +183,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
         }
     }
-
-    protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
-        @Override
-        protected ShowGifView doInBackground(String... params) {
-
-            InputStream theIS = null;
-
-            try {
-                theIS = theAssets.open("gifs/" + params[0]);
-                return new ShowGifView(theC, theIS);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    if (theIS != null) {
-                        theIS.close();
-                    }
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-
-        @Override
-        public void onPostExecute(final ShowGifView theGif) {
-            if (theGif == null) {
-                log("Return");
-                return;
-            }
-            theGif.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            theGif.setAdjustViewBounds(true);
-            theGif.setMaxHeight(100);
-            theGif.setMaxWidth(100);
-            animationsLayout.addView(theGif);
-        }
-    }
-
 
     /** For adding emojis to the layout
      * Given file name, gets Bitmap, adds it t layout
@@ -377,9 +331,11 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
-            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-            removeParent(animationsLayout);
-            theScroll.addView(animationsLayout);
+
+            final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
+            toSomewhere.putExtra("fileNames", animationsNames);
+
+            startActivity(toSomewhere);
             return rootInflater;
         }
     }
