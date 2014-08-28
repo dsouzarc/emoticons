@@ -52,6 +52,8 @@ public class AllGifs extends Activity {
         }
     }
 
+
+
     protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
         @Override
         protected ShowGifView doInBackground(String... params) {

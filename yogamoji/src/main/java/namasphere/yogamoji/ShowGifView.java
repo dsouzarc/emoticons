@@ -44,6 +44,7 @@ public class ShowGifView extends ImageView {
         movieWidth = 500;
         movieHeight = 500;
         movieDuration = 0;
+        this.gifInputStream = io;
 
         if (DECODE_STREAM) {
             gifMovie = Movie.decodeStream(io);
@@ -55,6 +56,10 @@ public class ShowGifView extends ImageView {
         movieHeight = gifMovie.height();
 
         movieDuration = gifMovie.duration();
+    }
+
+    public InputStream getGifInputStream() {
+        return this.gifInputStream;
     }
 
     private static byte[] streamToBytes(InputStream is) {
