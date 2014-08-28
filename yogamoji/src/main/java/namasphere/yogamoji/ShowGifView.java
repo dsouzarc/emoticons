@@ -62,7 +62,7 @@ public class ShowGifView extends ImageView {
         return this.gifInputStream;
     }
 
-    private static byte[] streamToBytes(InputStream is) {
+    public static byte[] streamToBytes(InputStream is) {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         byte[] buffer = new byte[1024];
         int len;
