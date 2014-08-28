@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,16 +62,27 @@ public class AllGifs extends Activity {
     }
 
     private final OnClickListener sendGifListener = new OnClickListener(){
-
         @Override
         public void onClick(View v) {
             final ShowGifView theGifView = (ShowGifView) v;
+            new Thread(new SendAnimation(theGifView.getGifName())).start();
+        }
+    };
 
+    private class SendAnimation implements Runnable {
+        private final String gifName;
+        public SendAnimation(final String gifName) {
+            this.gifName = gifName;
+        }
+
+        @Override
+        public void run() {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
             try {
                 InputStream in = null;
                 OutputStream out = null;
                 try {
-                    in = theAssets.open("gifs/" + theGifView.getGifName());
+                    in = theAssets.open("gifs/" + gifName);
                     out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), "image.gif"));
                     copyFile(in, out);
                     in.close();
@@ -83,11 +96,10 @@ public class AllGifs extends Activity {
                 }
 
                 final Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.setType("text/html");
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "File attached");
                 Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
                 emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                emailIntent.setType("image/gif");
+                startActivity(Intent.createChooser(emailIntent, "Send Animation"));
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -130,7 +142,6 @@ public class AllGifs extends Activity {
             return null;
         }
 
-
         @Override
         public void onPostExecute(final ShowGifView theGif) {
             if (theGif == null) {
@@ -155,6 +166,12 @@ public class AllGifs extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.all_gifs, menu);
         return true;
+    }
+
+    private void makeToast(final String theMessage) {
+        final Toast theToast = Toast.makeText(theC, theMessage, Toast.LENGTH_LONG);
+        theToast.setGravity(Gravity.CENTER, 0, 0);
+        theToast.show();
     }
 
     @Override
