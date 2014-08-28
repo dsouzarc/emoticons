@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,9 +53,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
     private static final  GridLayout.LayoutParams imageParams = new GridLayout.LayoutParams();
-
-    private final HashMap<String, Bitmap[]> theImages = new HashMap<String, Bitmap[]>();
-    private final HashMap<ImageView, Integer> theViews = new HashMap<ImageView, Integer>();
 
     private final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -126,23 +124,22 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 return;
             }
             makeToast("Loading...");
-            final Thread toSend = new Thread(new EmojiSender(theViews.get(v)));
+            final Thread toSend = new Thread(new EmojiSender((ImageView)v));
             toSend.setPriority(Thread.MAX_PRIORITY);
             toSend.start();
         }
     };
 
     private class EmojiSender implements Runnable {
-        private final int counter;
+        private final Bitmap theImage;
 
-        public EmojiSender(final int counter) {
-            this.counter = counter;
+        public EmojiSender(final ImageView theIV) {
+            this.theImage = ((BitmapDrawable) theIV.getDrawable()).getBitmap();
         }
 
         @Override
         public void run() {
             final long start = System.currentTimeMillis();
-            final Bitmap theImage = theImages.get(ALL_KEY)[counter];
 
             try {
                 File imageFile = new File(path, "Yogamoji!" + ".png");
@@ -170,11 +167,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
 
     private void getAllDrawables() {
-        theImages.put(ALL_KEY, new Bitmap[allNames.length]);
-        theImages.put(ASANA_KEY, new Bitmap[asanaNames.length]);
-        theImages.put(ANIMATIONS_KEY, new Bitmap[animationsNames.length]);
-        theImages.put(PHRASES_KEY, new Bitmap[phrasesNames.length]);
-        theImages.put(SYMBOLS_KEY, new Bitmap[symbolsNames.length]);
 
         int counter = 0;
 
@@ -285,13 +277,9 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 return;
             }
 
-            theImages.get(tag_name)[arrayElement] = theBitmap;
-            theImages.get(ALL_KEY)[counter] = theBitmap;
-
             final ImageView theImage = new ImageView(theC);
             theImage.setImageBitmap(theBitmap);
             setImageParams(theImage);
-            theViews.put(theImage, counter);
             allLayout.addView(theImage);
 
             log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
@@ -299,7 +287,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             final ImageView theImage1 = new ImageView(theC);
             theImage1.setImageBitmap(theBitmap);
             setImageParams(theImage1);
-            theViews.put(theImage1, counter);
 
             if(tag_name.equals(ASANA_KEY)) {
                 asanaLayout.addView(theImage1);
