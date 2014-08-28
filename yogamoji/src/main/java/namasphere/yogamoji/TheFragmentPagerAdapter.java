@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.widget.Button;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -342,6 +343,19 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
+            final Button toAnimations = (Button) rootInflater.findViewById(R.id.viewAnimations);
+            toAnimations.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
+                        toSomewhere.putExtra("fileNames", animationsNames);
+                        startActivity(toSomewhere);
+                    }
+                    catch (Exception e) {
+                    }
+                }
+            });
             return rootInflater;
         }
 
