@@ -107,6 +107,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         symbolsLayout.setRowCount(symbolsNames.length + 1);
 
         getAllDrawables();
+        log("WIDTH: " + imageWidth);
+        log("HEIGHT: " + imageHeight);
     }
 
     /** On click listener for sending a Yogamoji */
@@ -198,7 +200,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
             try {
                 return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName)),
-                        imageWidth, imageHeight, false);
+                        SIZE, SIZE, false);
             }
             catch (Exception e) {
                 log("Error at getBitmap" + e.toString());
@@ -282,6 +284,13 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         theImage.setMinimumWidth(imageWidth);
         theImage.setMaxHeight(imageHeight);
         theImage.setMaxWidth(imageWidth);
+
+        try {
+            theImage.getLayoutParams().height = imageHeight;
+            theImage.getLayoutParams().width = imageWidth;
+        }
+        catch (Exception e) {
+        }
     }
 
     @Override
