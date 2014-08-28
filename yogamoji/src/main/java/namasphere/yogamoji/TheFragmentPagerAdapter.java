@@ -47,7 +47,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     public static final String SYMBOLS = "symbols.txt";
 
     private final int SIZE = 250;
-    private static final int PAGE_COUNT = 5;
+    private static final int PAGE_COUNT = 4;
     private final int SIDE_MARGIN;
 
     private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
@@ -59,7 +59,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     private final AssetManager theAssets;
 
     private final String[] allNames, asanaNames, animationsNames, phrasesNames, symbolsNames;
-    private final GridLayout allLayout, asanaLayout, animationsLayout, phrasesLayout, symbolsLayout;
+    private final GridLayout asanaLayout, animationsLayout, phrasesLayout, symbolsLayout;
 
     private final int width, height, imageWidth, imageHeight;
 
@@ -85,27 +85,21 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         symbolsNames = getEmojiNamesList(SYMBOLS);
         allNames = getAllNames();
 
-        allLayout = new GridLayout(theC);
         asanaLayout = new GridLayout(theC);
         animationsLayout = new GridLayout(theC);
         phrasesLayout = new GridLayout(theC);
         symbolsLayout = new GridLayout(theC);
 
-        allLayout.setLayoutParams(gridParams);
         asanaLayout.setLayoutParams(gridParams);
         animationsLayout.setLayoutParams(gridParams);
         phrasesLayout.setLayoutParams(gridParams);
         symbolsLayout.setLayoutParams(gridParams);
 
-        allLayout.setColumnCount(3);
         asanaLayout.setColumnCount(3);
         animationsLayout.setColumnCount(2);
         phrasesLayout.setColumnCount(3);
         symbolsLayout.setColumnCount(3);
 
-        makeToast(String.valueOf(allNames.length));
-
-        allLayout.setRowCount(allNames.length + 1);
         asanaLayout.setRowCount(asanaNames.length + 1);
         animationsLayout.setRowCount(animationsNames.length + 2);
         phrasesLayout.setRowCount(phrasesNames.length + 1);
@@ -167,90 +161,105 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
 
     private void getAllDrawables() {
+        final Thread getImages1 = new Thread(new GetImages(0));
+        getImages1.start();
+        final Thread getImages2 = new Thread(new GetImages(1));
+        getImages2.start();
+        final Thread getImages3 = new Thread(new GetImages(2));
+        getImages3.start();
 
-        int counter = 0;
+    }
 
-        for(int i = 0; i < asanaNames.length; i++, counter++) {
-            new EmojiAdder(ASANA_KEY, i, counter).execute(asanaNames[i]);
+    private class GetImages implements Runnable {
+        private final int startAt;
+
+        public GetImages(final int startAt) {
+            this.startAt = startAt;
         }
 
-        for(int i = 0; i < phrasesNames.length; i++, counter++) {
-            new EmojiAdder(PHRASES_KEY, i, counter).execute(phrasesNames[i]);
-        }
+        @Override
+        public void run() {
+            for(int i = startAt; i < allNames.length; i+= 3) {
+                try {
+                    new AddToDisplay(i,
+                            getBitmap(allNames[i])).execute();
+                }
+                catch (Exception e) {
+                    log(e.toString());
+                    e.printStackTrace();
+                }
 
-        for(int i = 0; i < symbolsNames.length; i++, counter++) {
-            new EmojiAdder(SYMBOLS_KEY, i, counter).execute(symbolsNames[i]);
+            }
         }
     }
 
-    /** For adding emojis to the layout
-     * Given file name, gets Bitmap, adds it t layout
-     */
-    protected class EmojiAdder extends AsyncTask<String, Void, Bitmap> {
-        private long startTime;
-        private final String tag_name;
-        private final int arrayElement, counter;
+    private class AddToDisplay extends AsyncTask<Void, Void, ImageView> {
+        private final int counter;
+        private final Bitmap theBM;
 
-        public EmojiAdder(final String tag_name, final int arrayElement, final int counter) {
-            this.tag_name = tag_name;
-            this.arrayElement = arrayElement;
+        public AddToDisplay(final int counter, final Bitmap theBM) {
             this.counter = counter;
+            this.theBM = theBM;
         }
 
         @Override
-        public Bitmap doInBackground(final String... fileName) {
-            startTime = System.currentTimeMillis();
-
-            InputStream theIS = null;
-
-            try {
-                theIS = theAssets.open("emojis/" + fileName[0]);
-                return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theIS),
-                      SIZE, SIZE, false);
-            }
-            catch (Exception e) {
-                log(e.toString());
-                e.printStackTrace();
-            }
-            finally {
-                if(theIS != null) {
-                    try {
-                        theIS.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(final Bitmap theBitmap) {
-            if(theBitmap == null) {
-                log("Return");
-                return;
-            }
-
+        public ImageView doInBackground(Void... params) {
             final ImageView theImage = new ImageView(theC);
-            theImage.setImageBitmap(theBitmap);
+            theImage.setImageBitmap(theBM);
             setImageParams(theImage);
-            allLayout.addView(theImage);
+            return theImage;
+        }
 
-            log("ADDED IMAGE IN MS:\t" + (System.currentTimeMillis() - startTime));
+        @Override
+        public void onPostExecute(final ImageView theView) {
 
-            final ImageView theImage1 = new ImageView(theC);
-            theImage1.setImageBitmap(theBitmap);
-            setImageParams(theImage1);
+            if(counter <= asanaNames.length) {
+                asanaLayout.addView(theView);
+            }
+            else if(counter <= (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {
+                phrasesLayout.addView(theView);
+            }
+            else if(counter <= symbolsNames.length && counter >= (phrasesNames.length + asanaNames.length)) {
+                symbolsLayout.addView(theView);
+            }
+        }
+    }
 
-            if(tag_name.equals(ASANA_KEY)) {
-                asanaLayout.addView(theImage1);
-            }
-            else if(tag_name.equals(PHRASES_KEY)) {
-                phrasesLayout.addView(theImage1);
-            }
-            else if(tag_name.equals(SYMBOLS_KEY)) {
-                symbolsLayout.addView(theImage1);
-            }
+    private final BitmapFactory.Options o = new BitmapFactory.Options();
+    private final BitmapFactory.Options o2 = new BitmapFactory.Options();
+    private Bitmap getBitmap(final String fileName) {
+
+        try {
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream(theAssets.open("emojis/fileName")), 300, 300, false);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+                o.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName), null, o);
+                //Find the correct scale value. It should be the power of 2.
+                final int REQUIRED_SIZE = 70;
+                int width_tmp = o.outWidth, height_tmp = o.outHeight;
+                int scale = 1;
+                while (true) {
+                    if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                        break;
+                    width_tmp /= 2;
+                    height_tmp /= 2;
+                    scale++;
+                }
+
+                //decode with inSampleSize
+                o2.inSampleSize = scale;
+                return BitmapFactory.decodeStream(theAssets.open("emojis/" + fileName), null, o2);
+        }
+        catch (Exception e) {
+            log("HERE ERROR: " + e.toString());
+            e.printStackTrace();
+            return null;
+
         }
     }
 
@@ -271,30 +280,24 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         switch(tabSelected) {
 
             case 0:
-                final AllEmojis allE = new AllEmojis();
-                data.putInt("current_page", tabSelected + 1);
-                allE.setArguments(data);
-                return allE;
-
-            case 1:
                 final AsanaEmojis theAE = new AsanaEmojis();
                 data.putInt("current_page", tabSelected+1);
                 theAE.setArguments(data);
                 return theAE;
 
-            case 2:
+            case 1:
                 final AnimationEmojis theAnimations = new AnimationEmojis();
                 data.putInt("current_page", tabSelected + 1);
                 theAnimations.setArguments(data);
                 return theAnimations;
 
-            case 3:
+            case 2:
                 PhrasesEmojis thePhrases = new PhrasesEmojis();
                 data.putInt("current_page", tabSelected+1);
                 thePhrases.setArguments(data);
                 return thePhrases;
 
-            case 4:
+            case 3:
                 SymbolsEmojis theSymbols = new SymbolsEmojis();
                 data.putInt("current_page", tabSelected + 1);
                 theSymbols.setArguments(data);
@@ -302,17 +305,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         return null;
-    }
-
-    public class AllEmojis extends EmojiList {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-            final View rootInflater = inflater.inflate(R.layout.all_emojis, container, false);
-            final ScrollView theView = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
-            removeParent(allLayout);
-            theView.addView(allLayout);
-            return rootInflater;
-        }
     }
 
     public class AsanaEmojis extends EmojiList {

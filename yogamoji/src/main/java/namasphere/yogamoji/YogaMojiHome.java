@@ -84,24 +84,17 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager.setAdapter(fragmentPagerAdapter);
         theActionBar.setDisplayShowTitleEnabled(true);
 
-        //Create the tabs
-        Tab theTab = theActionBar.newTab().setText(ALL).setTabListener(tabListener);
-        theTab.setCustomView(getTab(ALL));
-        theActionBar.addTab(theTab, 0);
 
-        theTab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
+        Tab theTab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
         theTab.setCustomView(getTab(ASANA));
-        theActionBar.addTab(theTab, 1);
+        theActionBar.addTab(theTab, 0);
 
         theTab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
         theTab.setCustomView(getTab(ANIMATIONS));
-        theActionBar.addTab(theTab, 2);
+        theActionBar.addTab(theTab, 1);
 
-        //new AddTabTask(ALL, 0).execute();
-        //new AddTabTask(ANIMATIONS, 1).execute();
-        //new AddTabTask(ASANA, 2).execute();
-        new AddTabTask(PHRASES, 3).execute();
-        new AddTabTask(SYMBOLS, 4).execute();
+        new AddTabTask(PHRASES, 2).execute();
+        new AddTabTask(SYMBOLS, 3).execute();
     }
 
     //Tab listener
@@ -115,18 +108,15 @@ public class YogaMojiHome extends FragmentActivity {
 
             switch(tab.getPosition()) {
                 case 0:
-                    theActionBar.setTitle("All Yogamojis!");
-                    break;
-                case 1:
                     theActionBar.setTitle("Asana Yogamojis!");
                     break;
-                case 2:
+                case 1:
                     theActionBar.setTitle("Yogamoji Animations!");
                     break;
-                case 3:
+                case 2:
                     theActionBar.setTitle("Yogamoji Phrases!");
                     break;
-                case 4:
+                case 3:
                     theActionBar.setTitle("Yogamoji Symbols!");
                     break;
                 default:
