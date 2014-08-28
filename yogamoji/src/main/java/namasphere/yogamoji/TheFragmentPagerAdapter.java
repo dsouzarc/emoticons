@@ -349,9 +349,13 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         public void setMenuVisibility(final boolean visible) {
             super.setMenuVisibility(visible);
             if (visible) {
-                final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
-                toSomewhere.putExtra("fileNames", animationsNames);
-                startActivity(toSomewhere);
+                try {
+                    final Intent toSomewhere = new Intent(getActivity(), AllGifs.class);
+                    toSomewhere.putExtra("fileNames", animationsNames);
+                    startActivity(toSomewhere);
+                }
+                catch (Exception e) {
+                }
             }
         }
     }
