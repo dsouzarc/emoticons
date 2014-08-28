@@ -208,7 +208,7 @@ public abstract class EmojiList extends Fragment {
             if (!found && Character.isLetter(chars[i])) {
                 chars[i] = Character.toUpperCase(chars[i]);
                 found = true;
-            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') { // You can add other chars here
+            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') {
                 found = false;
             }
         }

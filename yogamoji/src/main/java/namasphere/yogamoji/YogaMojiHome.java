@@ -3,13 +3,11 @@ package namasphere.yogamoji;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import java.io.InputStream;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.Gravity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,11 +15,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
 
 public class YogaMojiHome extends FragmentActivity {
 
@@ -61,6 +63,8 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager = (ViewPager) findViewById(R.id.theViewPager);
 
         final FragmentManager theManager = getSupportFragmentManager();
+
+        final Window theWindow = getWindow();
 
         //listener for pageChange
         final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener(){

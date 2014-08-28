@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import java.io.InputStream;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,11 +27,11 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -229,6 +228,7 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
                 log("Return");
                 return;
             }
+            theGif.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             theGif.setAdjustViewBounds(true);
             theGif.setMaxHeight(100);
             theGif.setMaxWidth(100);
