@@ -64,6 +64,7 @@ public class AllGifs extends Activity {
     private final OnClickListener sendGifListener = new OnClickListener(){
         @Override
         public void onClick(View v) {
+            makeToast("Loading");
             final ShowGifView theGifView = (ShowGifView) v;
             new Thread(new SendAnimation(theGifView.getGifName())).start();
         }
