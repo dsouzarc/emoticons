@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ScrollView;
@@ -26,10 +27,13 @@ import java.io.OutputStream;
 
 public class AllGifs extends Activity {
 
+    private static final int PADDING = 16;
+
     private Context theC;
-    private GridLayout theGrid;
     private String[] fileNames;
     private AssetManager theAssets;
+
+    private LinearLayout theLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +45,30 @@ public class AllGifs extends Activity {
 
     private void initializeVariables() {
         this.theC = getApplicationContext();
-        this.theGrid = new GridLayout(theC);
         this.theAssets = getAssets();
 
-        final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
-        gridParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        gridParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        theGrid.setLayoutParams(gridParams);
-        theGrid.setColumnCount(2);
+        this.theLayout = new LinearLayout(theC);
+        this.theLayout.setOrientation(LinearLayout.VERTICAL);
+        this.theLayout.setLayoutParams(new android.widget.LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
 
         final Bundle fromPrevious = getIntent().getExtras();
         fileNames = fromPrevious.getStringArray("fileNames");
 
         final ScrollView theSV = (ScrollView) findViewById(R.id.theScrollView);
-        theSV.addView(theGrid);
+        theSV.addView(theLayout);
 
-        for(String fileName : fileNames) {
-            new AnimationAdder().execute(fileName);
+        final LinearLayout.LayoutParams theP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        theP.weight = 1;
+
+        for(int i = 0; i < fileNames.length - 1; i++) {
+            final LinearLayout tempLayout = new LinearLayout(theC);
+            tempLayout.setLayoutParams(theP);
+            tempLayout.setOrientation(LinearLayout.HORIZONTAL);
+            theLayout.addView(tempLayout);
+            new AnimationAdder(tempLayout).execute(fileNames[i]);
+            new AnimationAdder(tempLayout).execute(fileNames[++i]);
         }
     }
 
@@ -118,6 +129,12 @@ public class AllGifs extends Activity {
     }
 
     protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
+
+        private final LinearLayout theLayout;
+        public AnimationAdder(LinearLayout tl) {
+            this.theLayout = tl;
+        }
+
         @Override
         protected ShowGifView doInBackground(String... params) {
 
@@ -153,8 +170,13 @@ public class AllGifs extends Activity {
             theGif.setAdjustViewBounds(true);
             theGif.setMaxHeight(100);
             theGif.setMaxWidth(100);
+            theGif.setPadding(PADDING, PADDING, PADDING, 0);
             theGif.setOnClickListener(sendGifListener);
-            theGrid.addView(theGif);
+            final LinearLayout.LayoutParams theP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            theP.weight = 1;
+            theGif.setLayoutParams(theP);
+            theLayout.addView(theGif);
         }
     }
 
