@@ -7,8 +7,8 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 public class ShowGifView extends ImageView {
 
     private static final boolean DECODE_STREAM = true;
