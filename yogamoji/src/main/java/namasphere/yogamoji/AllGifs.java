@@ -32,14 +32,20 @@ public class AllGifs extends Activity {
     private Context theC;
     private String[] fileNames;
     private AssetManager theAssets;
-
     private LinearLayout theLayout;
+
+    private static final LinearLayout.LayoutParams gifLayoutParam =
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+
+    final LinearLayout.LayoutParams gifLinearLayoutParam =
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_gifs);
-
         initializeVariables();
     }
 
@@ -49,7 +55,7 @@ public class AllGifs extends Activity {
 
         this.theLayout = new LinearLayout(theC);
         this.theLayout.setOrientation(LinearLayout.VERTICAL);
-        this.theLayout.setLayoutParams(new android.widget.LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        this.theLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
         final Bundle fromPrevious = getIntent().getExtras();
@@ -58,13 +64,12 @@ public class AllGifs extends Activity {
         final ScrollView theSV = (ScrollView) findViewById(R.id.theScrollView);
         theSV.addView(theLayout);
 
-        final LinearLayout.LayoutParams theP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        theP.weight = 1;
+        gifLinearLayoutParam.weight = 2;
+        gifLayoutParam.weight = 1;
 
         for(int i = 0; i < fileNames.length - 1; i++) {
             final LinearLayout tempLayout = new LinearLayout(theC);
-            tempLayout.setLayoutParams(theP);
+            tempLayout.setLayoutParams(gifLinearLayoutParam);
             tempLayout.setOrientation(LinearLayout.HORIZONTAL);
             theLayout.addView(tempLayout);
             new AnimationAdder(tempLayout).execute(fileNames[i]);
@@ -172,10 +177,7 @@ public class AllGifs extends Activity {
             theGif.setMaxWidth(100);
             theGif.setPadding(PADDING, PADDING, PADDING, 0);
             theGif.setOnClickListener(sendGifListener);
-            final LinearLayout.LayoutParams theP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            theP.weight = 1;
-            theGif.setLayoutParams(theP);
+            theGif.setLayoutParams(gifLayoutParam);
             theLayout.addView(theGif);
         }
     }
