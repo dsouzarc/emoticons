@@ -1,5 +1,5 @@
 AWAKE.gif
-Breathe
+Breathe.gif
 Half-Lift-Stretch.gif
 Heart-Center.gif
 Namaste-Bow.gif
@@ -9,6 +9,5 @@ Shivasana.gif
 Thai-Massage.gif
 Vinyasa.gif
 Yoga-Flip.gif
-Yoga-Moji
 Yoga-Namaste.gif
 Yoga.gif
