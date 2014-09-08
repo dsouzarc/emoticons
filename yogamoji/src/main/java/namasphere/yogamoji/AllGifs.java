@@ -163,6 +163,7 @@ public class AllGifs extends Activity {
                     e.printStackTrace();
                 }
             }
+            log("Problem: " + params[0]);
             return null;
         }
 
