@@ -113,7 +113,8 @@ public class AllGifs extends Activity {
                 }
 
                 final Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
+                final Uri uri =
+                        Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
                 emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 emailIntent.setType("image/gif");
                 startActivity(Intent.createChooser(emailIntent, "Send Animation"));
@@ -123,7 +124,7 @@ public class AllGifs extends Activity {
                 log("Error sending: " + e.toString());
             }
         }
-    };
+    }
 
     private void copyFile(InputStream in, OutputStream out) throws Exception {
         byte[] buffer = new byte[1024];
