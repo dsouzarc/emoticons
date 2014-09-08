@@ -164,6 +164,7 @@ public class AllGifs extends Activity {
                 }
             }
             log("Problem: " + params[0]);
+
             return null;
         }
 
