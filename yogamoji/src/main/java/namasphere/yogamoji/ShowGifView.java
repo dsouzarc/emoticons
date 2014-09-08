@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.IOException;
 public class ShowGifView extends ImageView {
 
     private static final boolean DECODE_STREAM = true;
@@ -74,7 +75,7 @@ public class ShowGifView extends ImageView {
             while ((len = is.read(buffer)) >= 0) {
                 os.write(buffer, 0, len);
             }
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
         }
         return os.toByteArray();
     }
@@ -112,7 +113,6 @@ public class ShowGifView extends ImageView {
             }
 
             int relTime = (int) ((now - mMovieStart) % dur);
-
             gifMovie.setTime(relTime);
             gifMovie.draw(canvas, 0, 0);
             invalidate();
