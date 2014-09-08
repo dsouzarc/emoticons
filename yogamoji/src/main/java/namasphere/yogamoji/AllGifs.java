@@ -173,8 +173,8 @@ public class AllGifs extends Activity {
             }
             theGif.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             theGif.setAdjustViewBounds(true);
-            theGif.setMaxHeight(100);
-            theGif.setMaxWidth(100);
+            theGif.setMinimumHeight(500);
+            theGif.setMinimumWidth(500);
             theGif.setPadding(PADDING, PADDING, PADDING, 0);
             theGif.setOnClickListener(sendGifListener);
             theGif.setLayoutParams(gifLayoutParam);

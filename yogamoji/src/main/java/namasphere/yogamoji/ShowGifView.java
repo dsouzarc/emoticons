@@ -82,7 +82,8 @@ public class ShowGifView extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(movieWidth, movieHeight);
+        //setMeasuredDimension(movieWidth, movieHeight);
+        setMeasuredDimension(500, 500);
     }
 
     public int getMovieWidth() {
