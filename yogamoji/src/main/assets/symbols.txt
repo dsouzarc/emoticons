@@ -11,20 +11,22 @@ Anjali_Mudra.png
 Blocks.png
 Buddha.png
 Cairn Rock Stack.png
-Crystal Bowls6.png
+Crystal Bowls.png
 dancing Shiva.png
 Eye Of Horus.png
 Ganesha.png
 Gong.png
-Gyan Mudras.png
+Gyan Mudra.png
 incense .png
 Infinite Knot.png
 Infinity.png
-Infinity.psd
 Long Mat.png
+lotus flower.png
 Lotus Mudra.png
+Mandala.PNG
 Mat.png
-Meditation Glow.png
+Meditation.png
+Merkaba.png
 Midnight Om.png
 Mudra.png
 Nicoles Hawk.png
@@ -33,8 +35,9 @@ Om_glow.png
 Om.png
 Patanjali.png
 Peacock Feather.png
-Sacred Geometry.PNG
+Platonic Solids.PNG
 strap .png
+Thai Massage.png
 Third Eye.png
 YIN YANG.png
 Yoga Studio.png
