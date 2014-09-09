@@ -40,6 +40,7 @@ strap .png
 Thai Massage.png
 Third Eye.png
 YIN YANG.png
+Yoga_Class.png
 Yoga Studio.png
 Yoga Sutras.png
 Yuths Pyramid.png
