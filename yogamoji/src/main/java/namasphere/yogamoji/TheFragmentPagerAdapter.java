@@ -1,30 +1,5 @@
 package namasphere.yogamoji;
 
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.AssetManager;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -36,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
@@ -44,18 +18,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -79,10 +56,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final LinearLayout.LayoutParams gifLayoutParam =
             new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-
-    private static final LinearLayout.LayoutParams gifLinearLayoutParam =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
 
     private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
@@ -173,8 +146,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             final long start = System.currentTimeMillis();
 
             try {
-                File imageFile = new File(path, "Yogamoji!" + ".png");
-                FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
+                final File imageFile = new File(path, "Yogamoji!" + ".png");
+                final FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
                 fileOutPutStream.flush();
                 fileOutPutStream.close();
@@ -196,7 +169,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
     };
 
-
     private void getAllDrawables() {
         final Thread getImages1 = new Thread(new GetImages(0));
         getImages1.start();
@@ -211,7 +183,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     private class GetImages implements Runnable {
-
         private final BitmapFactory.Options o = new BitmapFactory.Options();
         private final BitmapFactory.Options o2 = new BitmapFactory.Options();
 
@@ -340,10 +311,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
-
         @Override
         protected ShowGifView doInBackground(String... params) {
-
             InputStream theIS = null;
 
             try {
@@ -383,10 +352,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             theGif.setOnLongClickListener(sendAnimationListener);
             theGif.setLayoutParams(gifLayoutParam);
             animationsLayout.addView(theGif);
-            //theLayout.addView(theGif);
         }
     }
-
 
     private class AddToDisplay extends AsyncTask<Void, Void, ImageView> {
         private final int counter;
@@ -412,11 +379,9 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
         @Override
         public void onPostExecute(final ImageView theView) {
-
             if(theView == null) {
                 return;
             }
-
             if(counter <= asanaNames.length) {
                 asanaLayout.addView(theView);
             }
@@ -451,7 +416,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         Bundle data = new Bundle();
         
         switch(tabSelected) {
-
             case 0:
                 final AsanaEmojis theAE = new AsanaEmojis();
                 data.putInt("current_page", tabSelected+1);
@@ -495,13 +459,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
-            /*final Button toAnimations = (Button) rootInflater.findViewById(R.id.viewAnimations);
-            toAnimations.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    viewAnimations(getActivity());
-                }
-            }); */
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
             removeParent(animationsLayout);
             theScroll.addView(animationsLayout);
@@ -513,18 +470,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         public void setMenuVisibility(final boolean visible) {
             super.setMenuVisibility(visible);
             if (visible) {
-                viewAnimations(getActivity());
+                //viewAnimations(getActivity());
             }
-        }
-    }
-
-    private void viewAnimations(final FragmentActivity theActivity) {
-        try {
-            final Intent toSomewhere = new Intent(theActivity, AllGifs.class);
-            toSomewhere.putExtra("fileNames", animationsNames);
-            theActivity.startActivity(toSomewhere);
-        }
-        catch (Exception e) {
         }
     }
 
