@@ -124,25 +124,6 @@ public class YogaMojiHome extends FragmentActivity {
         theTab = theActionBar.newTab().setText(SYMBOLS).setTabListener(tabListener);
         theTab.setCustomView(getTab(SYMBOLS));
         theActionBar.addTab(theTab, 3);
-
-        setTabsMaxWidth();
-    }
-
-    private void setTabsMaxWidth() {
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int screenWidth = displaymetrics.widthPixels;
-        final ActionBar actionBar = getActionBar();
-        final View tabView = actionBar.getTabAt(0).getCustomView();
-        final View tabContainerView = (View) tabView.getParent();
-        final int tabPadding = tabContainerView.getPaddingLeft() + tabContainerView.getPaddingRight();
-        final int tabs = actionBar.getTabCount();
-        for(int i=0 ; i < tabs ; i++){
-            View tab = actionBar.getTabAt(i).getCustomView();
-            TextView text1 = (TextView) tab.findViewById(R.id.title);
-            text1.setMaxWidth(screenWidth/tabs-tabPadding-1);
-            text1.setMinWidth(screenWidth/tabs-tabPadding-1);
-        }
     }
 
     //Tab listener
