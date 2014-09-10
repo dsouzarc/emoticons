@@ -1,5 +1,30 @@
 package namasphere.yogamoji;
 
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -50,6 +75,15 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private final int SIZE = 250;
     private static final int PAGE_COUNT = 4;
     private final int SIDE_MARGIN;
+    private static final int PADDING = 16;
+
+    private static final LinearLayout.LayoutParams gifLayoutParam =
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+
+    private static final LinearLayout.LayoutParams gifLinearLayoutParam =
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
 
     private static final GridLayout.LayoutParams gridParams = new GridLayout.LayoutParams();
     private static final  GridLayout.LayoutParams imageParams = new GridLayout.LayoutParams();
@@ -170,6 +204,10 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         getImages2.start();
         final Thread getImages3 = new Thread(new GetImages(2));
         getImages3.start();
+
+        for(int i = 0; i < animationsNames.length; i++) {
+            new AnimationAdder().execute(animationsNames[i]);
+        }
     }
 
     private class GetImages implements Runnable {
@@ -234,6 +272,121 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             }*/
         }
     }
+
+    private final OnClickListener startAnimationListener = new OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            final ShowGifView theGifView = (ShowGifView) v;
+            theGifView.startAnimation();
+        }
+    };
+
+    private final OnLongClickListener sendAnimationListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            makeToast("Loading");
+            final ShowGifView theGifView = (ShowGifView) v;
+            new Thread(new SendAnimation(theGifView.getGifName())).start();
+            return false;
+        }
+    };
+
+    private class SendAnimation implements Runnable {
+        private final String gifName;
+        public SendAnimation(final String gifName) {
+            this.gifName = gifName;
+        }
+
+        @Override
+        public void run() {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            try {
+                InputStream in = null;
+                OutputStream out = null;
+                try {
+                    in = theAssets.open("gifs/" + gifName);
+                    out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), "image.gif"));
+                    copyFile(in, out);
+                    in.close();
+                    in = null;
+                    out.flush();
+                    out.close();
+                    out = null;
+                } catch (Exception e) {
+                    Log.e("tag", e.getMessage());
+                    e.printStackTrace();
+                }
+
+                final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                final Uri uri =
+                        Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
+                emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                emailIntent.setType("image/gif");
+                theC.startActivity(Intent.createChooser(emailIntent, "Send Animation"));
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+                log("Error sending: " + e.toString());
+            }
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws Exception {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+    }
+
+    protected class AnimationAdder extends AsyncTask<String, Void, ShowGifView> {
+
+        @Override
+        protected ShowGifView doInBackground(String... params) {
+
+            InputStream theIS = null;
+
+            try {
+                theIS = theAssets.open("gifs/" + params[0]);
+                return new ShowGifView(theC, theIS, params[0]);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    if (theIS != null) {
+                        theIS.close();
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            log("Problem: " + params[0]);
+
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(final ShowGifView theGif) {
+            if (theGif == null) {
+                log("Return");
+                return;
+            }
+            theGif.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            theGif.setAdjustViewBounds(true);
+            theGif.setMinimumHeight(500);
+            theGif.setMinimumWidth(500);
+            theGif.setPadding(PADDING, PADDING, PADDING, 0);
+            theGif.setOnClickListener(startAnimationListener);
+            theGif.setOnLongClickListener(sendAnimationListener);
+            theGif.setLayoutParams(gifLayoutParam);
+            animationsLayout.addView(theGif);
+            //theLayout.addView(theGif);
+        }
+    }
+
 
     private class AddToDisplay extends AsyncTask<Void, Void, ImageView> {
         private final int counter;
@@ -342,13 +495,17 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             final View rootInflater = inflater.inflate(R.layout.animations_emojis, container, false);
-            final Button toAnimations = (Button) rootInflater.findViewById(R.id.viewAnimations);
+            /*final Button toAnimations = (Button) rootInflater.findViewById(R.id.viewAnimations);
             toAnimations.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     viewAnimations(getActivity());
                 }
-            });
+            }); */
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.theScrollView);
+            removeParent(animationsLayout);
+            theScroll.addView(animationsLayout);
+
             return rootInflater;
         }
 
