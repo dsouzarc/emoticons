@@ -77,16 +77,23 @@ public class AllGifs extends Activity {
         }
     }
 
-    private final OnClickListener startAnimationListenerListener = new OnClickListener(){
+    private final OnClickListener startAnimationListener = new OnClickListener(){
         @Override
         public void onClick(View v) {
-            makeToast("Loading");
             final ShowGifView theGifView = (ShowGifView) v;
             theGifView.startAnimation();
-            //new Thread(new SendAnimation(theGifView.getGifName())).start();
         }
     };
 
+    private final OnLongClickListener sendAnimationListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            makeToast("Loading");
+            final ShowGifView theGifView = (ShowGifView) v;
+            new Thread(new SendAnimation(theGifView.getGifName())).start();
+            return false;
+        }
+    };
 
 
     private class SendAnimation implements Runnable {
@@ -182,7 +189,8 @@ public class AllGifs extends Activity {
             theGif.setMinimumHeight(500);
             theGif.setMinimumWidth(500);
             theGif.setPadding(PADDING, PADDING, PADDING, 0);
-            theGif.setOnClickListener(startAnimationListenerListener);
+            theGif.setOnClickListener(startAnimationListener);
+            theGif.setOnLongClickListener(sendAnimationListener);
             theGif.setLayoutParams(gifLayoutParam);
             theLayout.addView(theGif);
         }
