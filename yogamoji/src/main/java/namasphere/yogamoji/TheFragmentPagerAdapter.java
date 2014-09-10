@@ -382,7 +382,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             if(theView == null) {
                 return;
             }
-            if(counter <= asanaNames.length) {
+            if(counter < asanaNames.length) {
                 asanaLayout.addView(theView);
             }
             else if(counter < (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {

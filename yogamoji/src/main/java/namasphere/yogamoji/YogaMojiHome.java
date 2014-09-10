@@ -45,7 +45,6 @@ public class YogaMojiHome extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yoga_moji_home);
-
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
         theC = getApplicationContext();
@@ -118,8 +117,31 @@ public class YogaMojiHome extends FragmentActivity {
         theTab.setCustomView(getTab(ANIMATIONS));
         theActionBar.addTab(theTab, 1);
 
-        new AddTabTask(PHRASES, 2).execute();
-        new AddTabTask(SYMBOLS, 3).execute();
+        theTab = theActionBar.newTab().setText(PHRASES).setTabListener(tabListener);
+        theTab.setCustomView(getTab(PHRASES));
+        theActionBar.addTab(theTab, 2);
+
+        theTab = theActionBar.newTab().setText(SYMBOLS).setTabListener(tabListener);
+        theTab.setCustomView(getTab(SYMBOLS));
+        theActionBar.addTab(theTab, 3);
+
+        setTabsMaxWidth();
+    }
+
+    private void setTabsMaxWidth() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int screenWidth = displaymetrics.widthPixels;
+        final ActionBar actionBar = getActionBar();
+        final View tabView = actionBar.getTabAt(0).getCustomView();
+        final View tabContainerView = (View) tabView.getParent();
+        final int tabPadding = tabContainerView.getPaddingLeft() + tabContainerView.getPaddingRight();
+        final int tabs = actionBar.getTabCount();
+        for(int i=0 ; i < tabs ; i++){
+            View tab = actionBar.getTabAt(i).getCustomView();
+            TextView text1 = (TextView) tab.findViewById(R.id.title);
+            text1.setMaxWidth(screenWidth/tabs-tabPadding-1);
+        }
     }
 
     //Tab listener
@@ -173,11 +195,11 @@ public class YogaMojiHome extends FragmentActivity {
             theImage.setImageBitmap(getDrawable("icons/asana.png"));
         }
         else if(type.equals(PHRASES)) {
-            theText.setTextSize(20);
+            //theText.setTextSize(20);
             theImage.setImageBitmap(getDrawable("icons/phrases.png"));
         }
         else if(type.equals(SYMBOLS)) {
-            theText.setTextSize(20);
+            //theText.setTextSize(20);
             theText.setGravity(Gravity.CENTER);
             theImage.setImageBitmap(getDrawable("icons/symbols.png"));
         }
