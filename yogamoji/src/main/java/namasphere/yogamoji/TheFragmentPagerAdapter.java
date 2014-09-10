@@ -385,7 +385,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             if(counter <= asanaNames.length) {
                 asanaLayout.addView(theView);
             }
-            else if(counter <= (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {
+            else if(counter < (phrasesNames.length + asanaNames.length) && counter >= asanaNames.length) {
                 phrasesLayout.addView(theView);
             }
             else if(counter >= (phrasesNames.length + asanaNames.length)) {
@@ -398,6 +398,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         theImage.setPadding(SIDE_MARGIN, 0, 0, SIDE_MARGIN * 2);
         theImage.setOnClickListener(SendEmojiListener);
         theImage.setCropToPadding(true);
+        theImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         theImage.setMinimumHeight(imageHeight);
         theImage.setMinimumWidth(imageWidth);
         theImage.setMaxHeight(imageHeight);
