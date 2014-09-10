@@ -50,7 +50,6 @@ public class YogaMojiHome extends FragmentActivity {
 
         theC = getApplicationContext();
         theAssets = theC.getAssets();
-        theResources = theC.getResources();
 
         theActionBar = getActionBar();
         theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -63,8 +62,6 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager = (ViewPager) findViewById(R.id.theViewPager);
 
         final FragmentManager theManager = getSupportFragmentManager();
-
-        final Window theWindow = getWindow();
 
         //listener for pageChange
         final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -176,11 +173,11 @@ public class YogaMojiHome extends FragmentActivity {
             theImage.setImageBitmap(getDrawable("icons/asana.png"));
         }
         else if(type.equals(PHRASES)) {
-            theText.setTextSize(15);
+            theText.setTextSize(20);
             theImage.setImageBitmap(getDrawable("icons/phrases.png"));
         }
         else if(type.equals(SYMBOLS)) {
-            theText.setTextSize(15);
+            theText.setTextSize(20);
             theText.setGravity(Gravity.CENTER);
             theImage.setImageBitmap(getDrawable("icons/symbols.png"));
         }
