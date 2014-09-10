@@ -67,6 +67,24 @@ public class ShowGifView extends ImageView {
 
     public void startAnimation() {
         this.gifMovie = Movie.decodeStream(this.gifInputStream);
+        long now = android.os.SystemClock.uptimeMillis();
+        if (mMovieStart == 0) { // first time
+            mMovieStart = now;
+        }
+
+        if (gifMovie != null) {
+
+            int dur = gifMovie.duration();
+            if (dur == 0) {
+                dur = 1000;
+            }
+
+            int relTime = (int) ((now - mMovieStart) % dur);
+            gifMovie.setTime(relTime);
+            gifMovie.setTime(0);
+            //gifMovie.draw(canvas, 0, 0);
+            invalidate();
+        }
     }
 
     public InputStream getGifInputStream() {
@@ -120,7 +138,8 @@ public class ShowGifView extends ImageView {
             }
 
             int relTime = (int) ((now - mMovieStart) % dur);
-            gifMovie.setTime(relTime);
+            //gifMovie.setTime(relTime);
+            gifMovie.setTime(0);
             gifMovie.draw(canvas, 0, 0);
             invalidate();
         }
