@@ -51,16 +51,22 @@ public class ShowGifView extends ImageView {
         movieHeight = 500;
         movieDuration = 0;
 
-        if (DECODE_STREAM) {
+        /*if (DECODE_STREAM) {
             gifMovie = Movie.decodeStream(io);
         } else {
             byte[] array = streamToBytes(io);
             gifMovie = Movie.decodeByteArray(array, 0, array.length);
-        }
+        }*/
+        byte[] array = streamToBytes(io);
+        gifMovie = Movie.decodeByteArray(array, 0, array.length);
         movieWidth = gifMovie.width();
         movieHeight = gifMovie.height();
 
         movieDuration = gifMovie.duration();
+    }
+
+    public void startAnimation() {
+        this.gifMovie = Movie.decodeStream(this.gifInputStream);
     }
 
     public InputStream getGifInputStream() {
