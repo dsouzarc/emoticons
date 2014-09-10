@@ -141,6 +141,7 @@ public class YogaMojiHome extends FragmentActivity {
             View tab = actionBar.getTabAt(i).getCustomView();
             TextView text1 = (TextView) tab.findViewById(R.id.title);
             text1.setMaxWidth(screenWidth/tabs-tabPadding-1);
+            text1.setMinWidth(screenWidth/tabs-tabPadding-1);
         }
     }
 
