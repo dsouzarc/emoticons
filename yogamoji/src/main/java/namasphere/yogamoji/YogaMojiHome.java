@@ -40,7 +40,6 @@ public class YogaMojiHome extends FragmentActivity {
     private ViewPager theViewPager;
     private Context theC;
     private AssetManager theAssets;
-    private Resources theResources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +169,7 @@ public class YogaMojiHome extends FragmentActivity {
             theImage.setImageBitmap(getDrawable("icons/all.png"));
         }
         else if(type.equals(ANIMATIONS)) {
-            theText.setText("GIFS");
+            theText.setText("Animations");
             theImage.setImageBitmap(getDrawable("icons/animations.png"));
         }
         else if(type.equals(ASANA)) {
