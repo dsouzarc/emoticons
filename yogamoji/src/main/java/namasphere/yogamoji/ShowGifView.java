@@ -47,27 +47,26 @@ public class ShowGifView extends ImageView {
         setFocusable(true);
         this.gifInputStream = io;
         gifMovie = null;
-        movieWidth = 500;
-        movieHeight = 500;
         movieDuration = 0;
 
+        //Used before when animation happened right away
         /*if (DECODE_STREAM) {
             gifMovie = Movie.decodeStream(io);
         } else {
             byte[] array = streamToBytes(io);
             gifMovie = Movie.decodeByteArray(array, 0, array.length);
         }*/
+
         byte[] array = streamToBytes(io);
+
         gifMovie = Movie.decodeByteArray(array, 0, array.length);
         movieWidth = gifMovie.width();
         movieHeight = gifMovie.height();
-
         movieDuration = gifMovie.duration();
     }
 
     public void startAnimation() {
         this.shouldAnimate = true;
-        log("Down here");
         invalidate();
     }
 
@@ -115,12 +114,10 @@ public class ShowGifView extends ImageView {
         }
 
         if (gifMovie != null) {
-
             int dur = gifMovie.duration();
             if (dur == 0) {
                 dur = 1000;
             }
-
             int relTime = (int) ((now - mMovieStart) % dur);
 
             if(shouldAnimate) {

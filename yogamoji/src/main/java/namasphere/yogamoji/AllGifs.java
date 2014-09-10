@@ -2,6 +2,7 @@ package namasphere.yogamoji;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View.OnLongClickListener;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
@@ -76,7 +77,7 @@ public class AllGifs extends Activity {
         }
     }
 
-    private final OnClickListener sendGifListener = new OnClickListener(){
+    private final OnClickListener startAnimationListenerListener = new OnClickListener(){
         @Override
         public void onClick(View v) {
             makeToast("Loading");
@@ -85,6 +86,8 @@ public class AllGifs extends Activity {
             //new Thread(new SendAnimation(theGifView.getGifName())).start();
         }
     };
+
+
 
     private class SendAnimation implements Runnable {
         private final String gifName;
@@ -179,7 +182,7 @@ public class AllGifs extends Activity {
             theGif.setMinimumHeight(500);
             theGif.setMinimumWidth(500);
             theGif.setPadding(PADDING, PADDING, PADDING, 0);
-            theGif.setOnClickListener(sendGifListener);
+            theGif.setOnClickListener(startAnimationListenerListener);
             theGif.setLayoutParams(gifLayoutParam);
             theLayout.addView(theGif);
         }
