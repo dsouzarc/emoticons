@@ -117,8 +117,16 @@ public class YogaMojiHome extends FragmentActivity {
         theTab.setCustomView(getTab(ANIMATIONS));
         theActionBar.addTab(theTab, 1);
 
-        new AddTabTask(PHRASES, 2).execute();
-        new AddTabTask(SYMBOLS, 3).execute();
+        theTab = theActionBar.newTab().setText(PHRASES).setTabListener(tabListener);
+        theTab.setCustomView(getTab(PHRASES));
+        theActionBar.addTab(theTab, 2);
+
+        theTab = theActionBar.newTab().setText(SYMBOLS).setTabListener(tabListener);
+        theTab.setCustomView(getTab(SYMBOLS));
+        theActionBar.addTab(theTab, 3);
+
+        //new AddTabTask(PHRASES, 2).execute();
+        //new AddTabTask(SYMBOLS, 3).execute();
     }
 
     //Tab listener
