@@ -5,7 +5,6 @@ import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -20,11 +19,12 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
+
+//TODO: SPLASH ACTIVITY OR SERVICE TO LOAD EVERYTHING
 
 public class YogaMojiHome extends FragmentActivity {
 
