@@ -51,7 +51,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private final int SIZE = 250;
     private static final int PAGE_COUNT = 4;
-    private final int SIDE_MARGIN;
     private static final int PADDING = 16;
 
     private static final LinearLayout.LayoutParams gifLayoutParam =
@@ -69,7 +68,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private final String[] allNames, asanaNames, animationsNames, phrasesNames, symbolsNames;
     private final GridLayout asanaLayout, animationsLayout, phrasesLayout, symbolsLayout;
 
-    private final int width, height, imageWidth, imageHeight;
+    private final int width, height, imageWidth, imageHeight, SIDE_MARGIN;
+    private final int animationWidth, animationSIDE_MARGIN;
 
     public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC, final int width, final int height) {
         super(fm);
@@ -79,6 +79,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         this.height = height;
         this.SIDE_MARGIN = (this.width - (3 * SIZE))/5;
         this.imageWidth = (this.width - (3 * SIZE))/3;
+        this.animationWidth = (this.width - (2 * SIZE))/4;
+        this.animationSIDE_MARGIN = (this.width - (2 * SIZE))/2;
         this.imageHeight = imageWidth;
         log("WiDTH\t" + imageWidth + " HEIGhT\t" + imageHeight);
 
@@ -345,9 +347,9 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             }
             theGif.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             theGif.setAdjustViewBounds(true);
-            theGif.setMinimumHeight(500);
-            theGif.setMinimumWidth(500);
-            theGif.setPadding(PADDING, PADDING, PADDING, 0);
+            theGif.setMinimumHeight(imageWidth);
+            theGif.setMinimumWidth(imageWidth);
+            theGif.setPadding(PADDING, PADDING, animationSIDE_MARGIN, 0);
             theGif.setOnClickListener(startAnimationListener);
             theGif.setOnLongClickListener(sendAnimationListener);
             theGif.setLayoutParams(gifLayoutParam);
