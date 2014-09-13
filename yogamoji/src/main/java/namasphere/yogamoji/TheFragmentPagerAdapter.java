@@ -349,7 +349,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             theGif.setAdjustViewBounds(true);
             theGif.setMinimumHeight(imageWidth);
             theGif.setMinimumWidth(imageWidth);
-            theGif.setPadding(PADDING, PADDING, animationSIDE_MARGIN, 0);
+            theGif.setPadding(animationSIDE_MARGIN, PADDING, animationSIDE_MARGIN, 0);
             theGif.setOnClickListener(startAnimationListener);
             theGif.setOnLongClickListener(sendAnimationListener);
             theGif.setLayoutParams(gifLayoutParam);
