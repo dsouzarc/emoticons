@@ -66,7 +66,7 @@ public class ShowGifView extends ImageView {
     }
 
     public void startAnimation() {
-        this.shouldAnimate = true;
+        this.shouldAnimate = !this.shouldAnimate;
         invalidate();
     }
 
