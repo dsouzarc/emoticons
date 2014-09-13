@@ -293,7 +293,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                         Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
                 emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 emailIntent.setType("image/gif");
-                theC.startActivity(Intent.createChooser(emailIntent, "Send Animation"));
+                theC.startActivity(Intent.createChooser(emailIntent, "Send Animation Using"));
             }
             catch(Exception e) {
                 e.printStackTrace();
