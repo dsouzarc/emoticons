@@ -157,7 +157,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
                 sendEmoji.setType("image/png");
 
-                final Intent theSender = Intent.createChooser(sendEmoji, "Send Yogamoji using ");
+                final Intent theSender = Intent.createChooser(sendEmoji, "Send Yoga Moji using ");
                 theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 theC.startActivity(theSender);
             } catch (Exception e) {

@@ -140,19 +140,19 @@ public class YogaMojiHome extends FragmentActivity {
 
             switch(tab.getPosition()) {
                 case 0:
-                    theActionBar.setTitle("Asana Yogamojis!");
+                    theActionBar.setTitle("Asana Yoga Moji");
                     break;
                 case 1:
-                    theActionBar.setTitle("Yogamoji Animations!");
+                    theActionBar.setTitle("Yoga Moji Animations!");
                     break;
                 case 2:
-                    theActionBar.setTitle("Yogamoji Phrases!");
+                    theActionBar.setTitle("Yoga Moji Phrases!");
                     break;
                 case 3:
-                    theActionBar.setTitle("Yogamoji Symbols!");
+                    theActionBar.setTitle("Yoga Moji Symbols!");
                     break;
                 default:
-                    theActionBar.setTitle("Yogamojis!");
+                    theActionBar.setTitle("Yoga Mojis");
                     break;
             }
         }
