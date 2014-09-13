@@ -1,12 +1,5 @@
-1st Chakra.png
-2nd Chakra.png
 3 Candles.png
-3rd Chakra.png
 3rd Eye.png
-4th_Chakra.png
-5th_Chakra.png
-6th Chakra.png
-7th_Chakra .png
 Anjali_Mudra.png
 Blocks.png
 Buddha.png
@@ -23,23 +16,30 @@ Infinity.png
 Long Mat.png
 lotus flower.png
 Lotus Mudra.png
-Mandala.PNG
 Mat.png
 Meditation.png
 Merkaba.png
-Midnight Om.png
 Mudra.png
 Nicoles Hawk.png
 Om Symbol.PNG
 Om_glow.png
-Om.png
 Peacock Feather.png
 Platonic Solids.PNG
 strap .png
 Thai Massage.png
 Third Eye.png
 YIN YANG.png
-Yoga_Class.png
 Yoga Studio.png
 Yoga Sutras.png
+1st Chakra.png
+2nd Chakra.png
+3rd Chakra.png
+4th_Chakra.png
+5th_Chakra.png
+6th Chakra.png
+7th_Chakra .png
+Mandala.PNG
+Midnight Om.png
+Yoga_Class.png
 Yuths Pyramid.png
+Om.png
