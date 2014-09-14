@@ -10,10 +10,6 @@ Eye Of Horus.png
 Ganesha.png
 Gong.png
 Gyan Mudra.png
-incense .png
-Infinite Knot.png
-Infinity.png
-Long Mat.png
 lotus flower.png
 Lotus Mudra.png
 Mat.png
@@ -43,3 +39,7 @@ Mandala.PNG
 Midnight Om.png
 Yoga_Class.png
 Yuths Pyramid.png
+incense .png
+Infinite Knot.png
+Infinity.png
+Long Mat.png
