@@ -92,14 +92,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="TheFragmentPagerAdapter.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="TheFragmentPagerAdapter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/yogamoji/src/main/java/namasphere/yogamoji/TheFragmentPagerAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4783599" vertical-offset="2970" max-vertical-offset="8175">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2970" max-vertical-offset="8175">
               <caret line="217" column="17" selection-start-line="217" selection-start-column="17" selection-end-line="217" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/yogamoji/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.41002277" vertical-offset="0" max-vertical-offset="555">
+              <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -912,7 +922,6 @@
         <option value="$PROJECT_DIR$/yogamoji/src/main/res/layout/phrases_emojis.xml" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/res/layout/symbols_emojis.xml" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/java/namasphere/yogamoji/EmojiList.java" />
-        <option value="$PROJECT_DIR$/yogamoji/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/java/namasphere/yogamoji/SendAnimation.java" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/assets/asana.txt" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/res/layout/asana_emojis.xml" />
@@ -929,6 +938,7 @@
         <option value="$PROJECT_DIR$/yogamoji/src/main/assets/phrases.txt" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/assets/animations.txt" />
         <option value="$PROJECT_DIR$/yogamoji/src/main/java/namasphere/yogamoji/TheFragmentPagerAdapter.java" />
+        <option value="$PROJECT_DIR$/yogamoji/src/main/AndroidManifest.xml" />
       </list>
     </option>
   </component>
@@ -1603,9 +1613,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="405">
           <caret line="13" column="47" selection-start-line="13" selection-start-column="47" selection-end-line="13" selection-end-column="47" />
-          <folding>
-            <element signature="e#346#364#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1649,9 +1657,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="405">
           <caret line="13" column="47" selection-start-line="13" selection-start-column="47" selection-end-line="13" selection-end-column="47" />
-          <folding>
-            <element signature="e#346#364#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1717,9 +1723,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="390">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding>
-            <element signature="e#346#364#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1934,16 +1938,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/yogamoji/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-          <folding>
-            <element signature="e#346#364#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/yogamoji/src/main/res/layout/animations_emojis.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6553398" vertical-offset="0" max-vertical-offset="412">
@@ -1989,11 +1983,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/yogamoji/src/main/java/namasphere/yogamoji/TheFragmentPagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4783599" vertical-offset="2970" max-vertical-offset="8175">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2970" max-vertical-offset="8175">
           <caret line="217" column="17" selection-start-line="217" selection-start-column="17" selection-end-line="217" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/yogamoji/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41002277" vertical-offset="0" max-vertical-offset="555">
+          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
