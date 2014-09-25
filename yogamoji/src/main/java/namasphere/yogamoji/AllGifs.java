@@ -127,7 +127,7 @@ public class AllGifs extends Activity {
                         Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
                 emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 emailIntent.setType("image/gif");
-                startActivity(Intent.createChooser(emailIntent, "Send Animation"));
+                startActivity(Intent.createChooser(emailIntent, "Send Gif"));
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -219,9 +219,6 @@ public class AllGifs extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }
