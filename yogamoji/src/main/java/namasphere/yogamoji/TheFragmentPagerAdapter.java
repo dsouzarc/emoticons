@@ -297,7 +297,9 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 sendIntent.setType("image/gif");
                 sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                theC.startActivity(Intent.createChooser(sendIntent, "Send Animation Using"));
+                Intent nextIntent = Intent.createChooser(sendIntent, "Send Animation Using");
+                nextIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                theC.startActivity(nextIntent);
             }
             catch(Exception e) {
                 e.printStackTrace();
