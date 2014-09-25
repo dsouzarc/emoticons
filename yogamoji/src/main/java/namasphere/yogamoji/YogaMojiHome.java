@@ -113,7 +113,7 @@ public class YogaMojiHome extends FragmentActivity {
         theTab.setCustomView(getTab(ASANA));
         theActionBar.addTab(theTab, 0);
 
-        theTab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
+        theTab = theActionBar.newTab().setText("Gifs").setTabListener(tabListener);
         theTab.setCustomView(getTab(ANIMATIONS));
         theActionBar.addTab(theTab, 1);
 
@@ -143,7 +143,7 @@ public class YogaMojiHome extends FragmentActivity {
                     theActionBar.setTitle("Asana Yoga Moji");
                     break;
                 case 1:
-                    theActionBar.setTitle("Yoga Moji Animations!");
+                    theActionBar.setTitle("Yoga Moji Gifs!");
                     break;
                 case 2:
                     theActionBar.setTitle("Yoga Moji Phrases!");
