@@ -15,6 +15,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.Gravity;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,13 +131,11 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 return;
             }
             makeToast("Loading...");
-            final Thread toSend = new Thread(new EmojiSender((ImageView)v));
-            toSend.setPriority(Thread.MAX_PRIORITY);
-            toSend.start();
+            new EmojiSender((ImageView)v).execute();
         }
     };
 
-    private class EmojiSender implements Runnable {
+    private class EmojiSender extends AsyncTask<Void, Void, File> {
         private final Bitmap theImage;
 
         public EmojiSender(final ImageView theIV) {
@@ -143,33 +143,38 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         @Override
-        public void run() {
-            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-            final long start = System.currentTimeMillis();
-
+        public File doInBackground(Void... params) {
             try {
                 final File imageFile = new File(path, "Yogamoji!" + ".png");
                 final FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
                 fileOutPutStream.flush();
                 fileOutPutStream.close();
-
-                final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
-                sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
-                sendEmoji.setType("image/png");
-
-                final Intent theSender = Intent.createChooser(sendEmoji, "Send Yoga Moji using ");
-                theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                theC.startActivity(theSender);
-            } catch (Exception e) {
-                e.printStackTrace();
+                return imageFile;
+            }
+            catch (Exception e) {
                 log(e.toString());
+                return null;
+            }
+        }
+
+        @Override
+        public void onPostExecute(final File imageFile) {
+            if(imageFile == null) {
+                makeToast("Sorry, something went wrong");
+                return;
             }
 
-            log("Sent image in: " + (System.currentTimeMillis() - start));
+            final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
+            sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
+            sendEmoji.setType("image/png");
+
+            final Intent theSender = Intent.createChooser(sendEmoji, "Send Yoga Moji using ");
+            theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            theC.startActivity(theSender);
         }
-    };
+    }
 
     private void getAllDrawables() {
         final Thread getImages1 = new Thread(new GetImages(0));
@@ -259,20 +264,20 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         public boolean onLongClick(View v) {
             makeToast("Loading");
             final ShowGifView theGifView = (ShowGifView) v;
-            new Thread(new SendAnimation(theGifView.getGifName())).start();
+            new SendAnimation(theGifView.getGifName()).execute();
             return false;
         }
     };
 
-    private class SendAnimation implements Runnable {
+    private class SendAnimation extends AsyncTask<Void, Void, Uri> {
         private final String gifName;
+
         public SendAnimation(final String gifName) {
             this.gifName = gifName;
         }
 
         @Override
-        public void run() {
-            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        public Uri doInBackground(Void... params) {
             try {
                 InputStream in = null;
                 OutputStream out = null;
@@ -290,21 +295,29 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                     e.printStackTrace();
                     makeToast("Sorry, something went wrong: " + e.toString());
                 }
+                return Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
+            } catch (Exception e) {
+                log(e.toString());
+                return null;
+            }
+        }
 
-                final Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                final Uri uri =
-                        Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
-                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                sendIntent.setType("image/gif");
-                sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Intent nextIntent = Intent.createChooser(sendIntent, "Send Gif Using");
-                nextIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                theC.startActivity(nextIntent);
+        @Override
+        public void onPostExecute(final Uri uri) {
+
+            if(uri == null) {
+                makeToast("Sorry, something went wrong");
+                return;
             }
-            catch(Exception e) {
-                e.printStackTrace();
-                log("Error sending: " + e.toString());
-            }
+
+            final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            sendIntent.setType("image/gif");
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            final Intent nextIntent = Intent.createChooser(sendIntent, "Send Gif Using");
+            nextIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            theC.startActivity(nextIntent);
         }
     }
 
