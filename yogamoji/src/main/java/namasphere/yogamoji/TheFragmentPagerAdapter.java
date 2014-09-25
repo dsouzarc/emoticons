@@ -288,14 +288,16 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 } catch (Exception e) {
                     Log.e("tag", e.getMessage());
                     e.printStackTrace();
+                    makeToast("Sorry, something went wrong: " + e.toString());
                 }
 
-                final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                final Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 final Uri uri =
                         Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.gif"));
-                emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                emailIntent.setType("image/gif");
-                theC.startActivity(Intent.createChooser(emailIntent, "Send Animation Using"));
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                sendIntent.setType("image/gif");
+                sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                theC.startActivity(Intent.createChooser(sendIntent, "Send Animation Using"));
             }
             catch(Exception e) {
                 e.printStackTrace();
