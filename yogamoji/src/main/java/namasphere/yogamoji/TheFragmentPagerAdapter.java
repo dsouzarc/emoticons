@@ -1,16 +1,21 @@
 package namasphere.yogamoji;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.provider.MediaStore;
+import android.content.ContentValues;
+import android.content.ContentProvider;
 import android.graphics.Bitmap;
-import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.content.DialogInterface;
-import android.app.AlertDialog;
-import android.support.v4.app.FragmentActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,8 +24,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.Gravity;
-import android.content.ClipboardManager;
-import android.content.ClipData;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -137,7 +140,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 log("Returning...");
                 return;
             }
-            makeToast("Loading...");
             new EmojiSender((ImageView)v).execute();
         }
     };
@@ -149,6 +151,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             this.theImage = ((BitmapDrawable) theIV.getDrawable()).getBitmap();
         }
 
+        private String fileName;
+
         @Override
         public Uri doInBackground(Void... params) {
             try {
@@ -157,7 +161,8 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
                 fileOutPutStream.flush();
                 fileOutPutStream.close();
-                return  Uri.parse("file://" + imageFile.getAbsolutePath());
+                this.fileName = "file://" + imageFile.getAbsolutePath();
+                return Uri.parse("file://" + imageFile.getAbsolutePath());
             }
             catch (Exception e) {
                 log(e.toString());
@@ -171,14 +176,24 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 makeToast("Sorry, something went wrong");
                 return;
             }
+            makeToast("Loading");
+            final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
+            sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
+            sendEmoji.setType("image/png");
 
-            final AlertDialog.Builder sendAlert = new AlertDialog.Builder(activity);
+            final Intent theSender = Intent.createChooser(sendEmoji, "Send Yoga Moji using ");
+            theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            theC.startActivity(theSender);
+
+            /*final AlertDialog.Builder sendAlert = new AlertDialog.Builder(activity);
             sendAlert.setTitle("Share this Yoga Moji");
             sendAlert.setMessage("Would you like to copy this Yoga Moji to your clipboard " +
                             "or share it on social media?");
             sendAlert.setPositiveButton("Share on Social Media", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    makeToast("Loading");
                     final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
                     sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
@@ -193,16 +208,20 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
             sendAlert.setNegativeButton("Copy to Clipboard", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //ClipData.Item item = new ClipData.Item(theUri);
-                    //ClipData data = new ClipData("label", new String[]{"image/jpeg"}, item);
-                    ClipData data = ClipData.newRawUri("image", theUri);
-                    final ClipboardManager theManager = (ClipboardManager)
-                            theC.getSystemService(Context.CLIPBOARD_SERVICE);
-                    theManager.setPrimaryClip(data);
+                    try {
+                        final ClipboardManager mClipboard =
+                                (ClipboardManager) theC.getSystemService(Context.CLIPBOARD_SERVICE);
 
+                        final ClipData theClip = ClipData.newUri(theC.getContentResolver(), "Image", theUri);
+                        mClipboard.setPrimaryClip(theClip);
+                        makeToast("Copied to clipboard!");
+                    }
+                    catch (Exception e) {
+                        log(e.toString());
+                    }
                 }
             });
-            sendAlert.show();
+            sendAlert.show();*/
         }
     }
 

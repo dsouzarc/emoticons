@@ -2,6 +2,7 @@ package namasphere.yogamoji;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -23,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
-import android.app.Activity;
 //TODO: SPLASH ACTIVITY OR SERVICE TO LOAD EVERYTHING
 
 public class YogaMojiHome extends FragmentActivity {
