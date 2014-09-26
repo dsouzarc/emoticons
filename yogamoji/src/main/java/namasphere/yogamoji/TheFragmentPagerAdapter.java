@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
+import android.support.v4.app.FragmentActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -67,16 +71,19 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private final Context theC;
     private final AssetManager theAssets;
 
+    private final Activity activity;
     private final String[] allNames, asanaNames, animationsNames, phrasesNames, symbolsNames;
     private final GridLayout asanaLayout, animationsLayout, phrasesLayout, symbolsLayout;
 
     private final int width, height, imageWidth, imageHeight, SIDE_MARGIN;
     private final int animationWidth, animationSIDE_MARGIN;
 
-    public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC, final int width, final int height) {
+    public TheFragmentPagerAdapter(final FragmentManager fm, final Context theC, final int width, final int height,
+                                   final Activity activity) {
         super(fm);
         this.theC = theC;
-        theAssets = theC.getAssets();
+        this.theAssets = theC.getAssets();
+        this.activity = activity;
         this.width = width;
         this.height = height;
         this.SIDE_MARGIN = (this.width - (3 * SIZE))/5;
@@ -135,7 +142,7 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
     };
 
-    private class EmojiSender extends AsyncTask<Void, Void, File> {
+    private class EmojiSender extends AsyncTask<Void, Void, Uri> {
         private final Bitmap theImage;
 
         public EmojiSender(final ImageView theIV) {
@@ -143,14 +150,14 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         @Override
-        public File doInBackground(Void... params) {
+        public Uri doInBackground(Void... params) {
             try {
                 final File imageFile = new File(path, "Yogamoji!" + ".png");
                 final FileOutputStream fileOutPutStream = new FileOutputStream(imageFile);
                 theImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutPutStream);
                 fileOutPutStream.flush();
                 fileOutPutStream.close();
-                return imageFile;
+                return  Uri.parse("file://" + imageFile.getAbsolutePath());
             }
             catch (Exception e) {
                 log(e.toString());
@@ -159,20 +166,43 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         @Override
-        public void onPostExecute(final File imageFile) {
-            if(imageFile == null) {
+        public void onPostExecute(final Uri theUri) {
+            if(theUri == null) {
                 makeToast("Sorry, something went wrong");
                 return;
             }
 
-            final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
-            sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            sendEmoji.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + imageFile.getAbsolutePath()));
-            sendEmoji.setType("image/png");
+            final AlertDialog.Builder sendAlert = new AlertDialog.Builder(activity);
+            sendAlert.setTitle("Share this Yoga Moji");
+            sendAlert.setMessage("Would you like to copy this Yoga Moji to your clipboard " +
+                            "or share it on social media?");
+            sendAlert.setPositiveButton("Share on Social Media", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final Intent sendEmoji = new Intent(Intent.ACTION_SEND);
+                    sendEmoji.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    sendEmoji.putExtra(Intent.EXTRA_STREAM, theUri);
+                    sendEmoji.setType("image/png");
 
-            final Intent theSender = Intent.createChooser(sendEmoji, "Send Yoga Moji using ");
-            theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            theC.startActivity(theSender);
+                    final Intent theSender = Intent.createChooser(sendEmoji, "Send Yoga Moji using ");
+                    theSender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    theC.startActivity(theSender);
+                }
+            });
+
+            sendAlert.setNegativeButton("Copy to Clipboard", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //ClipData.Item item = new ClipData.Item(theUri);
+                    //ClipData data = new ClipData("label", new String[]{"image/jpeg"}, item);
+                    ClipData data = ClipData.newRawUri("image", theUri);
+                    final ClipboardManager theManager = (ClipboardManager)
+                            theC.getSystemService(Context.CLIPBOARD_SERVICE);
+                    theManager.setPrimaryClip(data);
+
+                }
+            });
+            sendAlert.show();
         }
     }
 

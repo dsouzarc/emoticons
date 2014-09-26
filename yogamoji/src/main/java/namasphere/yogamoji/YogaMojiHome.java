@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
-
+import android.app.Activity;
 //TODO: SPLASH ACTIVITY OR SERVICE TO LOAD EVERYTHING
 
 public class YogaMojiHome extends FragmentActivity {
@@ -61,7 +61,6 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager = (ViewPager) findViewById(R.id.theViewPager);
 
         final FragmentManager theManager = getSupportFragmentManager();
-
         //listener for pageChange
         final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -104,7 +103,8 @@ public class YogaMojiHome extends FragmentActivity {
         theViewPager.setOnPageChangeListener(thePageListener);
 
         //Create FragmentPageAdapter
-        final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager, theC, width, height);
+        final TheFragmentPagerAdapter fragmentPagerAdapter =
+                new TheFragmentPagerAdapter(theManager, theC, width, height, (Activity) this);
 
         theViewPager.setAdapter(fragmentPagerAdapter);
         theActionBar.setDisplayShowTitleEnabled(true);
