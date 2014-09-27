@@ -2,16 +2,10 @@ package namasphere.yogamoji;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.provider.MediaStore;
-import android.content.ContentValues;
-import android.content.ContentProvider;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -311,7 +305,6 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private final OnLongClickListener sendAnimationListener = new OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            makeToast("Loading");
             final ShowGifView theGifView = (ShowGifView) v;
             new SendAnimation(theGifView.getGifName()).execute();
             return false;
@@ -359,14 +352,25 @@ public class TheFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 return;
             }
 
-            final Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            sendIntent.setType("image/gif");
-            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            final AlertDialog.Builder sendAlert = new AlertDialog.Builder(activity);
+            sendAlert.setTitle("Share this Yoga Moji");
+            sendAlert.setMessage("Please note that some apps do not animate GIFs. " +
+                    "As a result, only an image will be shown");
+            sendAlert.setPositiveButton("Share on Social Media", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    makeToast("Loading");
+                    final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                    sendIntent.setType("image/gif");
+                    sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            final Intent nextIntent = Intent.createChooser(sendIntent, "Send Gif Using");
-            nextIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            theC.startActivity(nextIntent);
+                    final Intent nextIntent = Intent.createChooser(sendIntent, "Send Gif Using");
+                    nextIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    theC.startActivity(nextIntent);
+                }
+            });
+            sendAlert.show();
         }
     }
 
