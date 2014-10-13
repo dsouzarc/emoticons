@@ -1,1 +1,1 @@
-Android Application for Yoga Emoticons
+Android Application for Emoticons
